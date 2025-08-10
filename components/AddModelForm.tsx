@@ -4,12 +4,15 @@ import { LLMRecord, Weight } from '../lib/types';
 
 const empty: LLMRecord = {
   model: '',
+  company: '',
   elo: 0,
   price: 0,
   context: 32000,
   weight: 'open',
   reasoning: false,
   features: [],
+  benchmark: '',
+  benchmarkText: '',
 };
 
 export default function AddModelForm({ onAdd }: { onAdd: (m: LLMRecord) => void }) {
@@ -28,6 +31,13 @@ export default function AddModelForm({ onAdd }: { onAdd: (m: LLMRecord) => void 
         value={form.model}
         onChange={(e) => setForm({ ...form, model: e.target.value })}
         placeholder="Model"
+        className="border p-1"
+      />
+      <input
+        required
+        value={form.company}
+        onChange={(e) => setForm({ ...form, company: e.target.value })}
+        placeholder="Company"
         className="border p-1"
       />
       <input
@@ -84,6 +94,20 @@ export default function AddModelForm({ onAdd }: { onAdd: (m: LLMRecord) => void 
           })
         }
         placeholder="features"
+        className="border p-1"
+      />
+      <input
+        required
+        value={form.benchmark}
+        onChange={(e) => setForm({ ...form, benchmark: e.target.value })}
+        placeholder="Benchmark"
+        className="border p-1"
+      />
+      <input
+        required
+        value={form.benchmarkText}
+        onChange={(e) => setForm({ ...form, benchmarkText: e.target.value })}
+        placeholder="Benchmark text"
         className="border p-1"
       />
       <button type="submit" className="bg-black text-white px-2 py-1">

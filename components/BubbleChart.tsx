@@ -11,12 +11,6 @@ import { LLMRecord } from '../lib/types';
 
 ChartJS.register(LinearScale, PointElement, Tooltip, Legend);
 
-const colors: Record<string, string> = {
-  open: 'rgba(34,197,94,0.5)',
-  closed: 'rgba(239,68,68,0.5)',
-  hybrid: 'rgba(59,130,246,0.5)',
-};
-
 function radius(context: number) {
   if (context >= 1_000_000) return 40;
   if (context >= 200_000) return 30;
@@ -25,7 +19,7 @@ function radius(context: number) {
   return 10;
 }
 
-export default function BubbleChart({ data }: { data: LLMRecord[] }) {
+export default function BubbleChart({ data, companyColors }: { data: LLMRecord[]; companyColors: Record<string, string> }) {
   const chartData = {
     datasets: [
       {
@@ -36,8 +30,8 @@ export default function BubbleChart({ data }: { data: LLMRecord[] }) {
           r: radius(d.context),
           ...d,
         })),
-        backgroundColor: data.map((d) => colors[d.weight]),
-        borderColor: data.map((d) => colors[d.weight]),
+        backgroundColor: data.map((d) => companyColors[d.company]),
+        borderColor: data.map((d) => companyColors[d.company]),
       },
     ],
   };
@@ -66,14 +60,6 @@ export default function BubbleChart({ data }: { data: LLMRecord[] }) {
   return (
     <div className="w-full">
       <Bubble data={chartData} options={options} />
-      <div className="flex flex-wrap gap-4 mt-4 text-sm">
-        {Object.entries(colors).map(([k, v]) => (
-          <div key={k} className="flex items-center gap-1">
-            <span className="w-3 h-3 rounded-sm" style={{ backgroundColor: v }}></span>
-            <span className="capitalize">{k}</span>
-          </div>
-        ))}
-      </div>
       <div className="flex flex-wrap gap-4 mt-2 text-sm items-center">
         {contextLegend.map((c) => (
           <div key={c} className="flex items-center gap-1">
