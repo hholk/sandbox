@@ -13,9 +13,16 @@ export default function Page() {
     fetch('/api/models')
       .then((r) => r.json())
       .then((res) => {
-        setData(res.data);
-        const first = res.data[0]?.benchmark;
-        if (first) setBenchmark(first);
+        if (res.data) {
+          setData(res.data);
+          const first = res.data[0]?.benchmark;
+          if (first) setBenchmark(first);
+        } else {
+          console.error(res.error || 'Failed to load models');
+        }
+      })
+      .catch((err) => {
+        console.error('Failed to load models', err);
       });
   }, []);
 
