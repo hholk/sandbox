@@ -10,6 +10,36 @@ import {
 import { LLMRecord } from '../lib/types';
 
 ChartJS.register(LinearScale, PointElement, Tooltip, Legend);
+ChartJS.defaults.font.family = '"IBM Plex Sans", sans-serif';
+
+const labelPlugin = {
+  id: 'labelPlugin',
+  afterDatasetsDraw(chart: any) {
+    const { ctx } = chart;
+    const dataset = chart.data.datasets[0];
+    const meta = chart.getDatasetMeta(0);
+    meta.data.forEach((element: any, index: number) => {
+      const { x, y } = element.tooltipPosition();
+      const r = element.options.radius || 0;
+      const d = dataset.data[index] as any;
+      if (d.short) {
+        ctx.save();
+        ctx.fillStyle = '#000';
+        ctx.font = '10px "IBM Plex Sans", sans-serif';
+        ctx.textAlign = 'center';
+        ctx.textBaseline = 'top';
+        ctx.fillText(d.short, x, y + r + 2);
+        ctx.restore();
+      }
+    });
+  },
+};
+
+ChartJS.register(labelPlugin);
+
+function shortName(model: string) {
+  return model.replace(/[^A-Za-z0-9]/g, '').slice(0, 8);
+}
 
 function radius(context: number) {
   if (context >= 1_000_000) return 40;
@@ -19,7 +49,7 @@ function radius(context: number) {
   return 10;
 }
 
-export default function BubbleChart({ data, companyColors }: { data: LLMRecord[]; companyColors: Record<string, string> }) {
+export default function BubbleChart({ data, colorFor }: { data: LLMRecord[]; colorFor: (d: LLMRecord) => string }) {
   const chartData = {
     datasets: [
       {
@@ -28,10 +58,11 @@ export default function BubbleChart({ data, companyColors }: { data: LLMRecord[]
           x: d.elo,
           y: 1 / d.price,
           r: radius(d.context),
+          short: shortName(d.model),
           ...d,
         })),
-        backgroundColor: data.map((d) => companyColors[d.company]),
-        borderColor: data.map((d) => companyColors[d.company]),
+        backgroundColor: data.map((d) => colorFor(d)),
+        borderColor: data.map((d) => colorFor(d)),
       },
     ],
   };
@@ -47,8 +78,16 @@ export default function BubbleChart({ data, companyColors }: { data: LLMRecord[]
         callbacks: {
           label: (ctx: any) => {
             const d = ctx.raw as any;
-            const feats = d.features?.join(', ');
-            return `${d.model}: Elo ${d.elo}, $${d.price}/tok, ctx ${d.context}, ${d.weight}, ${d.reasoning ? 'reasoning' : 'non-reasoning'}${feats ? ', ' + feats : ''}`;
+            return [
+              `Model: ${d.model}`,
+              `Company: ${d.company}`,
+              `Elo: ${d.elo}`,
+              `Price/token: $${d.price}`,
+              `Context: ${d.context}`,
+              `Weight: ${d.weight}`,
+              `Reasoning: ${d.reasoning ? 'yes' : 'no'}`,
+              `Features: ${d.features?.join(', ') || 'none'}`,
+            ];
           },
         },
       },
