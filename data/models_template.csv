@@ -1,0 +1,3 @@
+model,elo,price,context,weight,reasoning,features
+# features: semicolon-separated; known values include image and speech (icons provided). Other entries will display as text.
+example-model,0,0,0,open,false,"image;speech"

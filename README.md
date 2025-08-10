@@ -6,6 +6,7 @@ Minimal Next.js app that visualizes LLM models.
 - Bubble chart of Elo score (x) vs inverse price per token (y).
 - Bubble size reflects context window; legend shows common sizes.
 - Color legend distinguishes open, closed and hybrid weights; icons mark image, speech and reasoning capabilities.
+- The `features` column accepts semicolon-separated values. Icons are shown for `image` (🖼️) and `speech` (🗣️); other entries are rendered as plain text.
 - Data loaded from CSV (`data/models.csv`) and mirrored in a table beneath the chart.
 - `/api/models?source=URL` allows switching to other CSV/JSON sources.
 - Inline form lets you append models during a session (no persistence).
