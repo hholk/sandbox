@@ -1,0 +1,6 @@
+model,elo,price,context,weight,reasoning,features
+GPT-4o,1235,0.00001,128000,closed,true,"image;speech"
+Claude 3.5 Sonnet,1220,0.000008,200000,closed,true,"image"
+Llama3-70B,1180,0.000002,128000,open,false,""
+Gemini 1.5 Pro,1195,0.000007,1000000,hybrid,true,"image;speech"
+Mistral Small,1150,0.0000015,32000,open,false,""
