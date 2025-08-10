@@ -17,7 +17,7 @@ module.exports = {
         },
       },
       fontFamily: {
-        sans: ['"Inter Variable"', 'sans-serif'],
+        sans: ['"IBM Plex Sans"', 'sans-serif'],
       },
       fontSize: {
         display: ['72px', { lineHeight: '80px', fontWeight: '700' }],

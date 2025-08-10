@@ -24,35 +24,30 @@ export default function Page() {
   const benchmarks = Array.from(new Set(data.map((d) => d.benchmark)));
   const filtered = data.filter((d) => d.benchmark === benchmark);
 
-  const palette = [
-    '#e6194b',
-    '#3cb44b',
-    '#ffe119',
-    '#4363d8',
-    '#f58231',
-    '#911eb4',
-    '#46f0f0',
-    '#f032e6',
-    '#bcf60c',
-    '#fabebe',
-    '#008080',
-    '#e6beff',
-    '#9a6324',
-    '#fffac8',
-    '#800000',
-    '#aaffc3',
-    '#808000',
-    '#ffd8b1',
-    '#000075',
-    '#808080',
-  ];
-  const companyColors: Record<string, string> = {};
+  const hues = [0, 30, 60, 120, 180, 210, 240, 270, 300, 330];
+  const companyStats: Record<string, { hue: number; min: number; max: number }> = {};
   data.forEach((d) => {
-    if (!companyColors[d.company]) {
-      const idx = Object.keys(companyColors).length % palette.length;
-      companyColors[d.company] = palette[idx];
+    if (!companyStats[d.company]) {
+      const idx = Object.keys(companyStats).length % hues.length;
+      companyStats[d.company] = { hue: hues[idx], min: d.elo, max: d.elo };
+    } else {
+      companyStats[d.company].min = Math.min(companyStats[d.company].min, d.elo);
+      companyStats[d.company].max = Math.max(companyStats[d.company].max, d.elo);
     }
   });
+
+  const colorFor = (d: LLMRecord) => {
+    const stats = companyStats[d.company];
+    const range = stats.max - stats.min || 1;
+    const t = (d.elo - stats.min) / range;
+    const lightness = 80 - t * 40;
+    return `hsl(${stats.hue},70%,${lightness}%)`;
+  };
+
+  const legendColor = (company: string) => {
+    const stats = companyStats[company];
+    return `hsl(${stats.hue},70%,50%)`;
+  };
 
   const uniqueModels = Array.from(
     new Map(data.map((d) => [d.model, d])).values()
@@ -74,7 +69,7 @@ export default function Page() {
           ))}
         </select>
       </div>
-      <BubbleChart data={filtered} companyColors={companyColors} />
+      <BubbleChart data={filtered} colorFor={colorFor} />
       <div className="flex flex-wrap gap-4 mt-4 text-sm justify-center">
         {uniqueModels.map((m) => {
           const visible = filtered.some((f) => f.model === m.model);
@@ -88,7 +83,7 @@ export default function Page() {
                 className="w-3 h-3 rounded-sm"
                 style={{
                   backgroundColor: visible
-                    ? companyColors[m.company]
+                    ? legendColor(m.company)
                     : '#ccc',
                 }}
               ></span>
