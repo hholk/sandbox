@@ -11,4 +11,5 @@ export interface LLMRecord {
   features: string[]; // e.g. ['image','speech']
   benchmark: string;
   benchmarkText: string;
+  source: string;
 }

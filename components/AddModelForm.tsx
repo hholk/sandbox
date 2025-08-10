@@ -13,6 +13,7 @@ const empty: LLMRecord = {
   features: [],
   benchmark: '',
   benchmarkText: '',
+  source: '',
 };
 
 export default function AddModelForm({ onAdd }: { onAdd: (m: LLMRecord) => void }) {
@@ -108,6 +109,12 @@ export default function AddModelForm({ onAdd }: { onAdd: (m: LLMRecord) => void 
         value={form.benchmarkText}
         onChange={(e) => setForm({ ...form, benchmarkText: e.target.value })}
         placeholder="Benchmark text"
+        className="border p-1"
+      />
+      <input
+        value={form.source}
+        onChange={(e) => setForm({ ...form, source: e.target.value })}
+        placeholder="Source URL"
         className="border p-1"
       />
       <button type="submit" className="bg-black text-white px-2 py-1">
