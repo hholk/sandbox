@@ -29,7 +29,13 @@ export default function DataTable({ data }: { data: LLMRecord[] }) {
             <td className="p-2">{d.context.toLocaleString()}</td>
             <td className="p-2 capitalize">{d.weight}</td>
             <td className="p-2">{d.reasoning ? '🧠' : ''}</td>
-            <td className="p-2">{d.features?.map((f) => (f === 'image' ? '🖼️' : f === 'speech' ? '🗣️' : f)).join(' ')}</td>
+            <td className="p-2">
+              {(d.features || [])
+                .map((f) =>
+                  f === 'image' ? '🖼️' : f === 'speech' ? '🗣️' : f
+                )
+                .join(' ')}
+            </td>
             <td className="p-2">{d.benchmark}</td>
             <td className="p-2">
               {d.source && (
