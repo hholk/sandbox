@@ -16,6 +16,7 @@ export default function DataTable({ data }: { data: LLMRecord[] }) {
           <th className="p-2 text-left">Reasoning</th>
           <th className="p-2 text-left">Features</th>
           <th className="p-2 text-left">Benchmark</th>
+          <th className="p-2 text-left">Source</th>
         </tr>
       </thead>
       <tbody>
@@ -30,6 +31,18 @@ export default function DataTable({ data }: { data: LLMRecord[] }) {
             <td className="p-2">{d.reasoning ? '🧠' : ''}</td>
             <td className="p-2">{d.features?.map((f) => (f === 'image' ? '🖼️' : f === 'speech' ? '🗣️' : f)).join(' ')}</td>
             <td className="p-2">{d.benchmark}</td>
+            <td className="p-2">
+              {d.source && (
+                <a
+                  href={d.source}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="underline"
+                >
+                  link
+                </a>
+              )}
+            </td>
           </tr>
         ))}
       </tbody>

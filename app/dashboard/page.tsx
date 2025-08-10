@@ -94,7 +94,19 @@ export default function Page() {
       </div>
       <AddModelForm onAdd={addModel} />
       <DataTable data={filtered} />
-      <p className="mt-4 text-sm text-center">{filtered[0]?.benchmarkText}</p>
+      <p className="mt-4 text-sm text-center">
+        {filtered[0]?.benchmarkText}{' '}
+        {filtered[0]?.source && (
+          <a
+            href={filtered[0].source}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="underline"
+          >
+            Source
+          </a>
+        )}
+      </p>
     </main>
   );
 }

@@ -56,7 +56,7 @@ export default function BubbleChart({ data, colorFor }: { data: LLMRecord[]; col
         label: 'LLMs',
         data: data.map((d) => ({
           x: d.elo,
-          y: 1 / d.price,
+          y: d.price > 0 ? 1 / d.price : 0,
           r: radius(d.context),
           short: shortName(d.model),
           ...d,
