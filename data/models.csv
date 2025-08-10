@@ -1,6 +1,9 @@
-model,elo,price,context,weight,reasoning,features
-GPT-4o,1235,0.00001,128000,closed,true,"image;speech"
-Claude 3.5 Sonnet,1220,0.000008,200000,closed,true,"image"
-Llama3-70B,1180,0.000002,128000,open,false,""
-Gemini 1.5 Pro,1195,0.000007,1000000,hybrid,true,"image;speech"
-Mistral Small,1150,0.0000015,32000,open,false,""
+model,company,elo,price,context,weight,reasoning,features,benchmark,benchmarkText
+GPT-4o,OpenAI,1235,0.00001,128000,closed,true,"image;speech",lmsys,"LMSYS Chatbot Arena Elo benchmark"
+Claude 3.5 Sonnet,Anthropic,1220,0.000008,200000,closed,true,"image",lmsys,"LMSYS Chatbot Arena Elo benchmark"
+Llama3-70B,Meta,1180,0.000002,128000,open,false,"",lmsys,"LMSYS Chatbot Arena Elo benchmark"
+Gemini 1.5 Pro,Google,1195,0.000007,1000000,hybrid,true,"image;speech",lmsys,"LMSYS Chatbot Arena Elo benchmark"
+Mistral Small,Mistral,1150,0.0000015,32000,open,false,"",lmsys,"LMSYS Chatbot Arena Elo benchmark"
+GPT-4o,OpenAI,85,0.00001,128000,closed,true,"image;speech",mmlu,"Massive Multitask Language Understanding accuracy"
+Claude 3.5 Sonnet,Anthropic,82,0.000008,200000,closed,true,"image",mmlu,"Massive Multitask Language Understanding accuracy"
+Llama3-70B,Meta,75,0.000002,128000,open,false,"",mmlu,"Massive Multitask Language Understanding accuracy"
