@@ -1,0 +1,5 @@
+{
+  "crons": [
+    { "path": "/api/maxpain?dates=2025-01-01", "schedule": "0 * * * *" }
+  ]
+}
