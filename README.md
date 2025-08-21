@@ -1,26 +1,25 @@
-# LLM Dashboard
+# BTC Max-Pain (Deribit)
 
-Minimal Next.js app that visualizes LLM models.
-
-## Features
-- Bubble chart of benchmark score (x) vs inverse price per token (y).
-- Bubble size reflects context window; legend shows common sizes.
-- Models are colored by company; legend lists all models and greys out those filtered out.
-- Filter at the top switches between benchmarks; the selected benchmark's description is shown at the bottom.
-- The `features` column accepts semicolon-separated values. Icons are shown for `image` (🖼️) and `speech` (🗣️); other entries are rendered as plain text.
-- Data loaded from CSV (`data/models.csv`) and mirrored in a table beneath the chart.
-- `/api/models?source=URL` allows switching to other CSV/JSON sources.
-- Inline form lets you append models during a session (no persistence).
+Next.js 14 app to compute BTC options max-pain from Deribit public data.
 
 ## Development
+
 ```bash
-npm install
-npm run dev
+pnpm install
+pnpm dev
 ```
 
-## Deployment to Vercel (Hobby plan)
-1. Push this repo to GitHub.
-2. In Vercel, choose **Import Project** → select the repo.
-3. Framework Preset: **Next.js**. Build command and output stay default.
-4. No disk writes at runtime; data updates require editing the CSV and redeploying.
-5. Optional: set `LEADERBOARD_SOURCE` env var with a remote CSV/JSON URL.
+## Tests
+
+```bash
+pnpm quality
+```
+
+## Deploy
+
+Deploy on Vercel. Set build command `pnpm build` and install command `pnpm install`.
+
+## Method
+
+Open interest per strike is aggregated from `get_book_summary_by_currency`.
+Max pain is strike minimizing combined loss of puts and calls.
