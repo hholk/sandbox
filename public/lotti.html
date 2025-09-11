@@ -1,0 +1,300 @@
+<!doctype html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, user-scalable=no">
+<title>Lotti Karotti – Karten ziehen (iPhone + Partikel)</title>
+<meta name="theme-color" content="#111111">
+<style>
+  :root{ --bg:#0b0b0c; --panel:#141416; --muted:#9aa0a6; --fg:#f5f7fa; --accent:#6ee7b7; --accent-2:#60a5fa; --danger:#ef4444; --warn:#f59e0b; --ok:#34d399; --shadow:0 6px 20px rgba(0,0,0,.35); --radius:16px; --tap:64px; }
+  *{box-sizing:border-box}
+  html,body{height:100%}
+  body{margin:0; min-height:100svh; height:100dvh; font-family: ui-rounded, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, Apple Color Emoji, Noto Color Emoji, sans-serif; color:var(--fg); background:linear-gradient(180deg,#0b0b0c,#0f1117); -webkit-font-smoothing:antialiased; -moz-osx-font-smoothing:grayscale}
+  .sr-only{position:absolute!important;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}
+  .app{height:100dvh;display:flex;flex-direction:column;gap:12px; padding:env(safe-area-inset-top) calc(env(safe-area-inset-left)+16px) env(safe-area-inset-bottom) calc(env(safe-area-inset-right)+16px)}
+  header,footer{display:flex;align-items:center;justify-content:space-between;gap:12px}
+  header{padding:8px 0}
+  .pill{display:inline-flex;align-items:center;gap:8px;padding:10px 14px;border-radius:999px;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.08);box-shadow:var(--shadow)}
+  .btn{appearance:none;border:none;padding:14px 18px;min-height:var(--tap);border-radius:14px;background:#1b1f2a;color:var(--fg);font-weight:700;font-size:16px;letter-spacing:.2px;box-shadow:var(--shadow);display:inline-flex;align-items:center;justify-content:center;gap:10px;touch-action:manipulation;-webkit-tap-highlight-color:transparent}
+  .btn:active{transform:translateY(1px)} .btn.primary{background:linear-gradient(180deg,#2dd4bf,#22c55e);color:#0b0b0c}
+  .btn.warn{background:linear-gradient(180deg,#fde047,#f59e0b);color:#111} .btn.ghost{background:rgba(255,255,255,.06)} .btn.danger{background:linear-gradient(180deg,#fb7185,#ef4444);color:#111}
+  .card-stage{position:relative;flex:1;display:grid;place-items:center;user-select:none}
+  .tap-area{position:absolute;inset:0;background:transparent;border:0;outline:none;appearance:none;-webkit-appearance:none;padding:0;-webkit-tap-highlight-color:transparent;cursor:pointer}
+  .card{width:min(88vw, 480px);aspect-ratio:64/89;border-radius:24px;background:linear-gradient(180deg,#1b2330,#0f172a);border:1px solid rgba(255,255,255,.08);display:grid;grid-template-rows:auto 1fr auto;box-shadow:0 20px 60px rgba(0,0,0,.55);padding:18px;transform:translateZ(0)}
+  .card.flip{animation:flip .45s ease both} @keyframes flip{from{transform:rotateY(-90deg);filter:blur(6px)}to{transform:rotateY(0);filter:blur(0)}}
+  .card .top,.card .bottom{display:flex;align-items:center;justify-content:space-between;font-weight:700;font-size:14px;color:var(--muted)}
+  .center{display:grid;place-items:center;position:relative}
+  .art{width:100%;display:grid;place-items:center}
+  .art svg{width:92%;height:auto;max-height:calc(100% - 16px);display:block}
+  .sub{margin-top:8px;font-size:14px;color:var(--muted);text-align:center}
+  footer{gap:10px} footer .btn{flex:1;min-width:0}
+  .tag{padding:6px 10px;border-radius:999px;background:rgba(255,255,255,.08);font-size:12px;color:var(--muted)}
+  /* Settings sheet */
+  .sheet{position:fixed;inset:0;display:none;z-index:30}
+  .sheet.show{display:block}
+  .backdrop{position:absolute;inset:0;background:rgba(0,0,0,.4);backdrop-filter:blur(4px)}
+  .panel{position:absolute;inset:auto 0 0 0;background:var(--panel);border-top-left-radius:24px;border-top-right-radius:24px;max-height:80dvh;overflow:auto;box-shadow:0 -12px 40px rgba(0,0,0,.5);padding:18px 16px calc(18px + env(safe-area-inset-bottom))}
+  .panel h2{margin:0 0 8px 0;font-size:18px} .panel h3{margin:16px 0 8px 0;font-size:16px;color:var(--muted)}
+  .grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+  .field{background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.08);border-radius:14px;padding:12px;display:flex;flex-direction:column;gap:8px}
+  .field label{font-size:13px;color:var(--muted)} .field input[type=number]{width:100%;padding:12px;border-radius:10px;border:1px solid rgba(255,255,255,.12);background:#0f1218;color:var(--fg);font-size:16px}
+  .switch{display:flex;align-items:center;justify-content:space-between;gap:8px;padding:12px;border-radius:12px;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.08)} .switch input{width:44px;height:24px}
+  .players{display:flex;flex-direction:column;gap:8px} .player-item{display:flex;gap:8px} .player-item input{flex:1;padding:12px;border-radius:10px;border:1px solid rgba(255,255,255,.12);background:#0f1218;color:var(--fg);font-size:16px}
+  .small{font-size:12px;color:var(--muted)} .kbd{font-family:ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;font-size:12px;padding:2px 6px;border-radius:6px;background:rgba(255,255,255,.1)}
+  .toast{position:fixed;left:50%;transform:translateX(-50%);bottom:calc(24px + env(safe-area-inset-bottom));background:#111827;color:var(--fg);padding:12px 14px;border-radius:12px;border:1px solid rgba(255,255,255,.08);box-shadow:var(--shadow);z-index:60;display:none}
+  .toast.show{display:block;animation:pop .2s ease}@keyframes pop{from{transform:translateX(-50%) scale(.9)}to{transform:translateX(-50%) scale(1)}}
+  .hint{font-size:12px;color:var(--muted);text-align:center;margin-top:6px}
+  /* Particles canvas */
+  .fx{position:absolute;inset:0;pointer-events:none}
+  /* Custom cards */
+  .custom-cards{display:flex;flex-direction:column;gap:8px}
+  .custom-card-item{display:flex;gap:8px}
+  .custom-card-item input[type=text]{flex:1;padding:12px;border-radius:10px;border:1px solid rgba(255,255,255,.12);background:#0f1218;color:var(--fg);font-size:16px}
+  .custom-card-item input[type=number]{width:72px;padding:12px;border-radius:10px;border:1px solid rgba(255,255,255,.12);background:#0f1218;color:var(--fg);font-size:16px}
+</style>
+</head>
+<body>
+<div class="app">
+  <header>
+    <div class="pill" id="turnPill">🐰 <strong id="turnName">Solo</strong></div>
+    <div class="row">
+      <button class="btn ghost" id="playersBtn" aria-label="Spieler">👥</button>
+      <button class="btn ghost" id="settingsBtn" aria-label="Einstellungen">⚙️</button>
+    </div>
+  </header>
+
+  <div class="card-stage">
+    <div class="card" id="card">
+      <div class="top">
+        <span id="badgeLeft" class="tag">Deck bereit</span>
+        <span id="badgeRight" class="tag">🃏</span>
+      </div>
+      <div class="center">
+        <div id="art" class="art" aria-hidden="true"></div>
+        <div id="value" class="sr-only" aria-live="polite">—</div>
+        <div id="subtitle" class="sub">Tippen zum Ziehen</div>
+      </div>
+      <div class="bottom">
+        <span id="deckCount" class="tag">🗂️ 0</span>
+        <span id="discardCount" class="tag">🗑️ 0</span>
+      </div>
+    </div>
+    <canvas class="fx" id="fx"></canvas>
+    <button class="tap-area" id="tapArea" aria-label="Karte ziehen"></button>
+  </div>
+
+  <div class="hint">Tipp: Langes Tippen = Rückgängig • Doppelt Tippen = Neu mischen</div>
+
+  <footer>
+    <button class="btn warn" id="undoBtn">↶ Rückgängig</button>
+    <button class="btn primary" id="drawBtn">🎴 Ziehen</button>
+    <button class="btn ghost" id="reshuffleBtn">🔄 Mischen</button>
+  </footer>
+</div>
+
+<!-- Settings Sheet -->
+<div class="sheet" id="sheet">
+  <div class="backdrop" data-close></div>
+  <div class="panel">
+    <div class="row" style="justify-content:space-between; align-items:center;">
+      <h2>⚙️ Einstellungen & Hausregeln</h2>
+      <button class="btn ghost" data-close>Fertig ✅</button>
+    </div>
+
+    <h3>🧱 Karten-Setup</h3>
+    <div class="grid">
+      <div class="field"><label>Anzahl <strong>1</strong>er-Karten</label><input type="number" id="c1" min="0" step="1"></div>
+      <div class="field"><label>Anzahl <strong>2</strong>er-Karten</label><input type="number" id="c2" min="0" step="1"></div>
+      <div class="field"><label>Anzahl <strong>3</strong>er-Karten</label><input type="number" id="c3" min="0" step="1"></div>
+      <div class="field"><label>Anzahl <strong>4</strong>er-Karten</label><input type="number" id="c4" min="0" step="1"></div>
+      <div class="field"><label>Anzahl <strong>Karotte</strong> 🥕</label><input type="number" id="ck" min="0" step="1"></div>
+      <div class="field"><label>Auto-Neumischen, wenn leer</label><div class="switch"><span class="small">Automatisch</span><input type="checkbox" id="autoShuffle"></div></div>
+    </div>
+
+    <div class="row" style="margin-top:10px; gap:8px;">
+      <button class="btn" id="presetEqual">Preset: Gleichverteilung</button>
+      <button class="btn" id="presetKids">Preset: Kinderfreundlich</button>
+      <button class="btn" id="applyDeck">Deck neu bauen 🔨</button>
+    </div>
+
+    <h3>🎨 Eigene Karten</h3>
+    <div class="custom-cards" id="customCards"></div>
+    <div class="row" style="margin-top:8px; gap:8px;">
+      <button class="btn" id="addCustom">+ Karte</button>
+      <button class="btn ghost" id="clearCustom">Liste leeren</button>
+    </div>
+
+    <h3>🐇 Hausregeln (optional)</h3>
+    <div class="grid">
+      <div class="switch"><span><strong>Karotten‑Kaskade</strong><br><span class="small">Bei 🥕 darf dieselbe Person sofort noch einmal ziehen.</span></span><input type="checkbox" id="ruleCascade"></div>
+      <div class="switch"><span><strong>Richtungswechsel</strong><br><span class="small">Bei 🥕 wechselt die Spielrichtung.</span></span><input type="checkbox" id="ruleReverse"></div>
+      <div class="switch"><span><strong>Vier überspringt Nächsten</strong><br><span class="small">Bei <span class="kbd">4</span> wird die nächste Person ausgelassen.</span></span><input type="checkbox" id="ruleSkipOnFour"></div>
+      <div class="switch"><span><strong>Haptik</strong><br><span class="small">Kurzes Vibrieren beim Ziehen (unterstützte Geräte).</span></span><input type="checkbox" id="haptics"></div>
+      <div class="switch"><span><strong>Sound</strong><br><span class="small">Dezentes „Plopp“ beim Ziehen.</span></span><input type="checkbox" id="sound"></div>
+    </div>
+
+    <h3>👥 Spieler</h3>
+    <div class="players" id="players"></div>
+    <div class="row" style="margin-top:8px;">
+      <button class="btn" id="addPlayer">+ Spieler</button>
+      <button class="btn ghost" id="clearPlayers">Liste leeren</button>
+    </div>
+
+    <div class="row" style="margin-top:12px;">
+      <button class="btn danger" id="resetAll">Alles zurücksetzen</button>
+      <button class="btn warn" id="saveSettings">Speichern 💾</button>
+    </div>
+
+    <p class="small" style="margin-top:10px;">Hinweis: Dies ist ein unabhängiges Werkzeug zum Ziehen von Karten mit frei einstellbaren Hausregeln. Es ersetzt kein offizielles Spielmaterial.</p>
+  </div>
+</div>
+
+<div class="toast" id="toast">Info</div>
+
+<script>
+(function(){
+  const $ = s=>document.querySelector(s), $$=s=>Array.from(document.querySelectorAll(s));
+  const state={players:[],currentIndex:0,direction:1,deck:[],discard:[],lastDraw:null,history:[],settings:{counts:{1:10,2:10,3:10,4:0,K:10},customCards:[],autoShuffle:true,rules:{cascade:true,reverse:false,skipOnFour:false},haptics:true,sound:false}};
+  const STORAGE_KEY='lk_state_ios_fx_v2';
+  const save=()=>{try{localStorage.setItem(STORAGE_KEY,JSON.stringify(state))}catch{}};
+  const load=()=>{try{const raw=localStorage.getItem(STORAGE_KEY);if(!raw)return;const d=JSON.parse(raw);Object.assign(state,d);state.settings=Object.assign({counts:{1:10,2:10,3:10,4:0,K:10},customCards:[],autoShuffle:true,rules:{cascade:true,reverse:false,skipOnFour:false},haptics:true,sound:false},state.settings||{});state.settings.counts=Object.assign({1:10,2:10,3:10,4:0,K:10},state.settings.counts||{});state.settings.customCards=Array.isArray(state.settings.customCards)?state.settings.customCards:[];state.settings.rules=Object.assign({cascade:true,reverse:false,skipOnFour:false},state.settings.rules||{})}catch{}};
+  const vibrate=ms=>{try{if(state.settings.haptics&&navigator.vibrate)navigator.vibrate(ms||12)}catch{}};
+  const beep=()=>{if(!state.settings.sound)return;try{const c=new (window.AudioContext||window.webkitAudioContext)(),o=c.createOscillator(),g=c.createGain();o.type='triangle';o.frequency.value=660;g.gain.value=.001;g.gain.exponentialRampToValueAtTime(.00001,c.currentTime+.08);o.connect(g).connect(c.destination);o.start();o.stop(c.currentTime+.09)}catch{}};
+  const shuffle=a=>{for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]]}return a};
+  const clone=o=>JSON.parse(JSON.stringify(o));
+  const pushHistory=()=>{state.history.push({players:clone(state.players),currentIndex:state.currentIndex,direction:state.direction,deck:clone(state.deck),discard:clone(state.discard),lastDraw:state.lastDraw?clone(state.lastDraw):null});if(state.history.length>25)state.history.shift()};
+  const toast=msg=>{const el=$('#toast');el.textContent=msg;el.classList.add('show');setTimeout(()=>el.classList.remove('show'),1500)};
+
+  // SVG ART
+  const artEl=$('#art');
+  function cardBackSVG(){return `
+  <svg viewBox="0 0 300 420" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Nachziehstapel">
+    <defs>
+      <linearGradient id="bg" x1="0" x2="0" y1="0" y2="1"><stop offset="0%" stop-color="#1f2a44"/><stop offset="100%" stop-color="#0b1224"/></linearGradient>
+      <pattern id="grid" width="18" height="18" patternUnits="userSpaceOnUse"><path d="M0 18 V0 H18" fill="none" stroke="rgba(255,255,255,.06)"/></pattern>
+      <linearGradient id="carrotG" x1="0" x2="0" y1="0" y2="1"><stop offset="0%" stop-color="#fca5a5"/><stop offset="100%" stop-color="#f59e0b"/></linearGradient>
+      <linearGradient id="leafG" x1="0" x2="1" y1="0" y2="0"><stop offset="0%" stop-color="#34d399"/><stop offset="100%" stop-color="#22d3ee"/></linearGradient>
+    </defs>
+    <rect x="0" y="0" width="300" height="420" rx="22" fill="url(#bg)"/>
+    <rect x="10" y="10" width="280" height="400" rx="18" fill="url(#grid)"/>
+    <g transform="translate(60,100)">
+      <path d="M40 0 C 20 20, 20 40, 40 60 C 10 60, 10 80, 40 90" fill="none" stroke="url(#leafG)" stroke-width="8" stroke-linecap="round"/>
+      <path d="M120 40 C 110 100, 70 150, 40 190 C 20 210, 0 210, 0 210 C 30 200, 60 200, 90 150 C 110 120, 130 70, 120 40 Z" fill="url(#carrotG)"/>
+      <circle cx="70" cy="140" r="2" fill="rgba(0,0,0,.25)"/>
+      <circle cx="85" cy="120" r="2" fill="rgba(0,0,0,.25)"/>
+    </g>
+    <rect x="10" y="10" width="280" height="400" rx="18" fill="none" stroke="rgba(255,255,255,.12)"/>
+  </svg>`}
+
+  function carrotSVG(){return `
+  <svg viewBox="0 0 300 420" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Karottenkarte">
+    <defs>
+      <linearGradient id="c1" x1="0" x2="0" y1="0" y2="1"><stop offset="0%" stop-color="#ffb199"/><stop offset="100%" stop-color="#f59e0b"/></linearGradient>
+      <linearGradient id="c2" x1="0" x2="1" y1="0" y2="1"><stop offset="0%" stop-color="#34d399"/><stop offset="100%" stop-color="#22d3ee"/></linearGradient>
+    </defs>
+    <rect x="0" y="0" width="300" height="420" rx="22" fill="#0e1420"/>
+    <g transform="translate(60,50)">
+      <path d="M30 40 C 20 20, 40 10, 60 20 C 50 5, 70 0, 85 12 C 75 0, 105 5, 105 20 C 120 15, 130 35, 120 50" fill="none" stroke="url(#c2)" stroke-width="10" stroke-linecap="round"/>
+      <path d="M70 70 C 65 130, 55 170, 30 210 C 15 235, 10 245, 30 250 C 75 260, 160 180, 170 130 C 175 100, 155 85, 120 78 C 95 72, 80 66, 70 70 Z" fill="url(#c1)"/>
+      <g fill="rgba(0,0,0,.25)"><ellipse cx="95" cy="135" rx="3" ry="2"/><ellipse cx="115" cy="122" rx="2.5" ry="2"/><ellipse cx="105" cy="150" rx="2.5" ry="2"/></g>
+    </g>
+    <text x="150" y="395" text-anchor="middle" font-size="22" fill="rgba(255,255,255,.6)" style="font-family: system-ui, -apple-system, Segoe UI, Roboto, sans-serif">Karotte drehen!</text>
+    <rect x="0" y="0" width="300" height="420" rx="22" fill="none" stroke="rgba(255,255,255,.12)"/>
+  </svg>`}
+
+  function numberSVG(n){
+    const steps={1:[[150,330]],2:[[110,330],[190,330]],3:[[90,330],[150,330],[210,330]],4:[[90,310],[210,310],[110,350],[190,350]]};
+    const dots=(steps[n]||[]).map(([x,y],i)=>`<g transform="translate(${x},${y})"><circle r="16" fill="url(#dotG)"/><text y="5" text-anchor="middle" font-size="14" fill="#0b0b0c" font-weight="700" style="font-family: system-ui, -apple-system, Segoe UI, Roboto, sans-serif">${i+1}</text></g>`).join('');
+    return `
+    <svg viewBox="0 0 300 420" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="${n} Felder vor">
+      <defs>
+        <linearGradient id="numG" x1="0" x2="0" y1="0" y2="1"><stop offset="0%" stop-color="#a7f3d0"/><stop offset="100%" stop-color="#22d3ee"/></linearGradient>
+        <linearGradient id="dotG" x1="0" x2="1" y1="0" y2="1"><stop offset="0%" stop-color="#60a5fa"/><stop offset="100%" stop-color="#34d399"/></linearGradient>
+        <mask id="numMask"><rect width="100%" height="100%" fill="black"/><text x="150" y="240" text-anchor="middle" font-size="220" font-weight="900" fill="white" style="font-family: system-ui, -apple-system, Segoe UI, Roboto, sans-serif">${n}</text></mask>
+      </defs>
+      <rect x="0" y="0" width="300" height="420" rx="22" fill="#0e1420"/>
+      <text x="150" y="240" text-anchor="middle" font-size="220" font-weight="900" fill="#baf7e3" opacity="0.18" style="font-family: system-ui, -apple-system, Segoe UI, Roboto, sans-serif">${n}</text>
+      <rect x="0" y="0" width="300" height="420" fill="url(#numG)" mask="url(#numMask)"/>
+      ${dots}
+      <rect x="0" y="0" width="300" height="420" rx="22" fill="none" stroke="rgba(255,255,255,.12)"/>
+    </svg>`
+  }
+
+  function customSVG(label){return `
+  <svg viewBox="0 0 300 420" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="${label}">
+    <rect x="0" y="0" width="300" height="420" rx="22" fill="#0e1420"/>
+    <text x="150" y="210" text-anchor="middle" font-size="72" font-weight="700" fill="#baf7e3" style="font-family: system-ui, -apple-system, Segoe UI, Roboto, sans-serif">${label}</text>
+    <rect x="0" y="0" width="300" height="420" rx="22" fill="none" stroke="rgba(255,255,255,.12)"/>
+  </svg>`}
+
+  function renderArt(card){ if(!card){ artEl.innerHTML=cardBackSVG(); return; } if(card.type==='K'){ artEl.innerHTML=carrotSVG(); return; } if(card.custom){ artEl.innerHTML=customSVG(card.label); return; } artEl.innerHTML=numberSVG(card.type); }
+
+  // Particles (confetti burst around card center)
+  const fx = $('#fx'); const ctx = fx.getContext('2d'); let particles=[]; let anim=null; let dpr=window.devicePixelRatio||1;
+  function sizeFX(){ const r=fx.getBoundingClientRect(); fx.width=Math.round(r.width*dpr); fx.height=Math.round(r.height*dpr); }
+  function burst(theme){
+    cancelAnimationFrame(anim); sizeFX(); particles=[];
+    const cardRect = $('#card').getBoundingClientRect(); const fxRect = fx.getBoundingClientRect();
+    const cx = (cardRect.left + cardRect.width/2 - fxRect.left)*dpr; const cy = (cardRect.top + cardRect.height/2 - fxRect.top)*dpr;
+    const N = 70; const cols = theme==='carrot' ? ['#f59e0b','#fb923c','#fde68a','#34d399','#22d3ee'] : ['#60a5fa','#34d399','#a7f3d0','#22d3ee'];
+    for(let i=0;i<N;i++){
+      const a = Math.random()*Math.PI*2; const v = 2 + Math.random()*4; const sz = 2 + Math.random()*6;
+      particles.push({x:cx,y:cy, vx:Math.cos(a)*v*dpr, vy:Math.sin(a)*v*dpr-2*dpr, r:sz*dpr, rot:Math.random()*Math.PI, vr:(Math.random()-.5)*0.2, life:700+Math.random()*400, t:0, color:cols[i%cols.length], shape: Math.random()<0.5?'rect':'circ'});
+    }
+    const start=performance.now();
+    (function loop(now){ const dt = now - (particles._last||now); particles._last=now; ctx.clearRect(0,0,fx.width,fx.height); let alive=false; for(const p of particles){ p.t += dt; if(p.t>p.life) continue; alive=true; p.vy += 0.015*dpr*dt; p.x += p.vx; p.y += p.vy; p.rot += p.vr; const alpha = Math.max(0, 1 - p.t/p.life); ctx.globalAlpha = alpha; ctx.fillStyle = p.color; ctx.save(); ctx.translate(p.x, p.y); ctx.rotate(p.rot); if(p.shape==='rect'){ ctx.fillRect(-p.r, -p.r*0.6, p.r*2, p.r*1.2); } else { ctx.beginPath(); ctx.arc(0,0,p.r,0,Math.PI*2); ctx.fill(); } ctx.restore(); }
+      ctx.globalAlpha=1; if(alive){ anim=requestAnimationFrame(loop);} }) (start);
+  }
+  window.addEventListener('resize', sizeFX, {passive:true}); sizeFX();
+
+  // Cards & deck
+  function buildDeckFromSettings(){ const {counts,customCards}=state.settings; const deck=[]; const push=(type,n)=>{for(let i=0;i<n;i++){deck.push({type,id:`${type}-${i}-${Math.random().toString(36).slice(2,7)}`})}}; push('1',+counts[1]||0); push('2',+counts[2]||0); push('3',+counts[3]||0); push('4',+counts[4]||0); push('K',+counts.K||0); for(const card of customCards){ for(let i=0;i<card.count;i++){ deck.push({type:'C',label:card.label,id:`C-${i}-${Math.random().toString(36).slice(2,7)}`,custom:true}); } } shuffle(deck); state.deck=deck; state.discard=[]; state.lastDraw=null; save(); updateUI(); }
+
+  const currentPlayer=()=>state.players.length?state.players[state.currentIndex]:'Solo';
+  function advanceTurn(steps){ if(!state.players.length) return; const n=state.players.length; let idx=state.currentIndex+steps*state.direction; idx=((idx%n)+n)%n; state.currentIndex=idx; }
+
+  const elDeckCount=$('#deckCount'), elDiscardCount=$('#discardCount'), elTurnName=$('#turnName');
+  const elBadgeLeft=$('#badgeLeft'), elBadgeRight=$('#badgeRight'), elSub=$('#subtitle'), elCard=$('#card');
+
+  function updateUI(){ elDeckCount.textContent=`🗂️ ${state.deck.length}`; elDiscardCount.textContent=`🗑️ ${state.discard.length}`; elTurnName.textContent=currentPlayer(); $('#turnPill').title=`Spielreihenfolge: ${state.direction===1?'↪︎ vorwärts':'↩︎ rückwärts'}`; if(state.lastDraw){ const d=state.lastDraw; renderArt(d); if(d.type==='K'){ elSub.textContent='Karotte drehen!'; elBadgeLeft.textContent='Spezial'; elBadgeRight.textContent='🥕'; } else if(d.custom){ elSub.textContent=d.label; elBadgeLeft.textContent='Spezial'; elBadgeRight.textContent='✨'; } else { elSub.textContent=`${d.type} Felder vor`; elBadgeLeft.textContent='Zahl'; elBadgeRight.textContent='🏁'; } } else { renderArt(null); elSub.textContent='Tippen zum Ziehen'; elBadgeLeft.textContent='Deck bereit'; elBadgeRight.textContent='🃏'; } }
+
+  function applyRules(card){ const {rules}=state.settings; if(card.type==='K'){ if(rules.reverse) state.direction*=-1; return {advance: rules.cascade?0:1}; } if(card.custom){ return {advance:1}; } if(rules.skipOnFour && card.type==='4') return {advance:2}; return {advance:1}; }
+
+  function drawCard(){ if(!state.deck.length){ if(state.settings.autoShuffle && state.discard.length){ reshuffle(); toast('Neu gemischt ♻️'); } else { toast('Kein Nachziehstapel. Mischen!'); vibrate(25); return; } } pushHistory(); const card=state.deck.pop(); state.discard.push(card); state.lastDraw=card; elCard.classList.remove('flip'); void elCard.offsetWidth; elCard.classList.add('flip'); vibrate(8); beep(); const {advance}=applyRules(card); if(card.type==='K'){ burst('carrot'); } else { burst('num'); } if(advance>0) advanceTurn(advance); save(); updateUI(); }
+
+  function undo(){ const snap=state.history.pop(); if(!snap){ toast('Nichts zum Rückgängig machen'); vibrate(20); return;} Object.assign(state,snap); save(); updateUI(); toast('Zurückgenommen ↩️'); }
+  function reshuffle(){ const keep=state.lastDraw?[state.lastDraw.id]:[]; const back=state.discard.filter(c=>!keep.includes(c.id)); state.discard=state.lastDraw?[state.lastDraw]:[]; state.deck=shuffle(state.deck.concat(back)); save(); updateUI(); }
+
+  // Settings UI
+  function openSheet(){ $('#sheet').classList.add('show'); loadSettingsIntoUI(); }
+  function closeSheet(){ $('#sheet').classList.remove('show'); }
+  function loadSettingsIntoUI(){ $('#c1').value=state.settings.counts[1]||0; $('#c2').value=state.settings.counts[2]||0; $('#c3').value=state.settings.counts[3]||0; $('#c4').value=state.settings.counts[4]||0; $('#ck').value=state.settings.counts.K||0; $('#autoShuffle').checked=!!state.settings.autoShuffle; $('#ruleCascade').checked=!!state.settings.rules.cascade; $('#ruleReverse').checked=!!state.settings.rules.reverse; $('#ruleSkipOnFour').checked=!!state.settings.rules.skipOnFour; $('#haptics').checked=!!state.settings.haptics; $('#sound').checked=!!state.settings.sound; renderPlayers(); renderCustomCards(); }
+  function saveSettingsFromUI(){ state.settings.counts={1:+$('#c1').value||0,2:+$('#c2').value||0,3:+$('#c3').value||0,4:+$('#c4').value||0,K:+$('#ck').value||0}; state.settings.autoShuffle=$('#autoShuffle').checked; state.settings.rules={cascade:$('#ruleCascade').checked,reverse:$('#ruleReverse').checked,skipOnFour:$('#ruleSkipOnFour').checked}; state.settings.haptics=$('#haptics').checked; state.settings.sound=$('#sound').checked; state.settings.customCards=$$('#customCards .custom-card-item').map(row=>({label:row.querySelector('.label').value.trim()||'?',count:+row.querySelector('.count').value||0})); save(); toast('Gespeichert 💾'); }
+  function renderPlayers(){ const box=$('#players'); box.innerHTML=''; if(!state.players.length){ const empty=document.createElement('div'); empty.className='small'; empty.textContent='Keine Spieler – Solo‑Modus'; box.appendChild(empty);} else { state.players.forEach((name,idx)=>{ const row=document.createElement('div'); row.className='player-item'; const inp=document.createElement('input'); inp.value=name; inp.placeholder=`Spieler ${idx+1}`; inp.addEventListener('input',e=>{state.players[idx]=e.target.value; save(); updateUI();}); const up=document.createElement('button'); up.className='btn ghost'; up.textContent='⬆️'; up.addEventListener('click',()=>{ if(idx>0){ [state.players[idx-1],state.players[idx]]=[state.players[idx],state.players[idx-1]]; save(); renderPlayers(); updateUI(); }}); const del=document.createElement('button'); del.className='btn danger'; del.textContent='🗑️'; del.addEventListener('click',()=>{ state.players.splice(idx,1); if(state.currentIndex>=state.players.length) state.currentIndex=0; save(); renderPlayers(); updateUI(); }); row.appendChild(inp); row.appendChild(up); row.appendChild(del); box.appendChild(row); }); } }
+  function renderCustomCards(){ const box=$('#customCards'); box.innerHTML=''; if(!state.settings.customCards.length){ const empty=document.createElement('div'); empty.className='small'; empty.textContent='Keine eigenen Karten'; box.appendChild(empty); } else { state.settings.customCards.forEach((card,idx)=>{ const row=document.createElement('div'); row.className='custom-card-item'; const label=document.createElement('input'); label.type='text'; label.className='label'; label.value=card.label; label.placeholder='Text'; label.addEventListener('input',e=>{card.label=e.target.value; save(); updateUI();}); const count=document.createElement('input'); count.type='number'; count.className='count'; count.min='0'; count.step='1'; count.value=card.count; count.addEventListener('input',e=>{card.count=+e.target.value||0; save();}); const del=document.createElement('button'); del.className='btn danger'; del.textContent='🗑️'; del.addEventListener('click',()=>{ state.settings.customCards.splice(idx,1); save(); renderCustomCards(); }); row.appendChild(label); row.appendChild(count); row.appendChild(del); box.appendChild(row); }); } }
+  function presetEqual(){ state.settings.counts={1:12,2:12,3:12,4:6,K:12}; save(); loadSettingsIntoUI(); toast('Preset: Gleichverteilung aktiviert'); }
+  function presetKids(){ state.settings.counts={1:16,2:14,3:10,4:4,K:6}; save(); loadSettingsIntoUI(); toast('Preset: Kinderfreundlich aktiviert'); }
+
+  // Events
+  $('#drawBtn').addEventListener('click',drawCard); $('#tapArea').addEventListener('click',drawCard);
+  let pressTimer; $('#tapArea').addEventListener('touchstart',()=>{pressTimer=setTimeout(undo,450)},{passive:true}); $('#tapArea').addEventListener('touchend',()=>{clearTimeout(pressTimer)},{passive:true});
+  let lastTap=0; $('#tapArea').addEventListener('touchend',()=>{const now=Date.now(); if(now-lastTap<250){reshuffle(); toast('Neu gemischt ♻️');} lastTap=now;},{passive:true});
+  $('#undoBtn').addEventListener('click',undo); $('#reshuffleBtn').addEventListener('click',()=>{reshuffle(); toast('Neu gemischt ♻️')});
+  $('#settingsBtn').addEventListener('click',openSheet); $('#playersBtn').addEventListener('click',()=>{openSheet(); setTimeout(()=>$('#addPlayer').focus(),50)});
+  $$('#sheet [data-close]').forEach(b=>b.addEventListener('click',closeSheet));
+  $('#addPlayer').addEventListener('click',()=>{state.players.push(`Spieler ${state.players.length+1}`); save(); renderPlayers(); updateUI();});
+  $('#clearPlayers').addEventListener('click',()=>{state.players=[]; state.currentIndex=0; save(); renderPlayers(); updateUI();});
+  $('#presetEqual').addEventListener('click',presetEqual); $('#presetKids').addEventListener('click',presetKids);
+  $('#applyDeck').addEventListener('click',()=>{saveSettingsFromUI(); buildDeckFromSettings();});
+  $('#saveSettings').addEventListener('click',()=>{saveSettingsFromUI(); closeSheet();});
+  $('#resetAll').addEventListener('click',()=>{state.players=[]; state.currentIndex=0; state.direction=1; state.settings={counts:{1:10,2:10,3:10,4:0,K:10},customCards:[],autoShuffle:true,rules:{cascade:true,reverse:false,skipOnFour:false},haptics:true,sound:false}; buildDeckFromSettings(); save(); renderPlayers(); loadSettingsIntoUI(); toast('Zurückgesetzt 🧹');});
+  $('#addCustom').addEventListener('click',()=>{state.settings.customCards.push({label:'Neu',count:1}); save(); renderCustomCards();});
+  $('#clearCustom').addEventListener('click',()=>{state.settings.customCards=[]; save(); renderCustomCards();});
+
+  // Init
+  load(); if(!state.deck.length && !state.discard.length){ state.settings.counts=state.settings.counts||{1:12,2:12,3:12,4:6,K:12}; buildDeckFromSettings(); } else { updateUI(); }
+  document.body.addEventListener('touchstart',()=>{}, {passive:true});
+})();
+</script>
+</body>
+</html>
