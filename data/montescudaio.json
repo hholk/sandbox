@@ -1,0 +1,248 @@
+{
+  "meta": {
+    "base": "Montescudaio",
+    "max_drive_min": 120,
+    "date_window": "15-22 Sep 2025",
+    "sort": "popularity_desc"
+  },
+  "items": [
+    {
+      "id": "pisa_miracoli_tower",
+      "name": "Pisa – Piazza dei Miracoli & Schiefer Turm",
+      "category": ["Stadt & Kultur"],
+      "popularity": 100,
+      "drive_min": 70,
+      "description": "Ikonisches Ensemble (Dom, Baptisterium, Camposanto & Turm) auf einer Rasenfläche – Romanik pur.",
+      "planning": "Beste Zeit: sehr früh (<10:00) oder spätnachmittags (ab 17:00). Park+Ride Pietrasantina nutzen; Shuttle in ~10–15 Min. ins Zentrum.",
+      "organizing": "Turm nur mit Zeitslot; Kauf ab 90 Tage vorher möglich. Shuttle Bus 25 fährt 1.4.–31.10. i. d. R. 10:00–19:15 alle 15 Min.",
+      "links": [
+        {"title": "Offizieller Ticketkauf OPA", "url": "https://www.opapisa.it/en/tickets/buy/"},
+        {"title": "Ticket-Hinweise (OPA)", "url": "https://www.opapisa.it/en/tickets/a-few-words-of-advice-before-you-buy-your-ticket/"},
+        {"title": "Shuttle P+R Pietrasantina (Comune Pisa)", "url": "https://www.turismo.pisa.it/en/servizio/Shuttle-bus-Park-Pietrasantina-Lungarni-Bus-25"}
+      ],
+      "image": "https://upload.wikimedia.org/wikipedia/commons/4/4e/Pisa_-_Duomo_Baptistery_CampoSanto_Leaning_Tower.jpg",
+      "map_query": "Pietrasantina Parking Pisa"
+    },
+    {
+      "id": "florence_uffizi_compact",
+      "name": "Florenz kompakt – Uffizien & Altstadt stressfrei",
+      "category": ["Stadt & Kultur"],
+      "popularity": 98,
+      "drive_min": 105,
+      "description": "Renaissance pur: Uffizi → Piazza della Signoria → Ponte Vecchio. Einfache City-Anfahrt via Tram vom P+R Villa Costanza.",
+      "planning": "Parken direkt an der A1-Abfahrt 'Villa Costanza'; Tram T1 alle ~6–8 Min. ~22 Min. bis SMN (Zentrum).",
+      "organizing": "Uffizi Mo oft geschlossen; Reservierung empfohlen. Frühslot günstiger/ruhiger.",
+      "links": [
+        {"title": "Uffizi – Tickets (offiziell)", "url": "https://www.uffizi.it/en/tickets"},
+        {"title": "P+R Villa Costanza", "url": "https://parcheggiovillacostanza.it/it/"}
+      ],
+      "image": "https://upload.wikimedia.org/wikipedia/commons/4/4c/Panorama_of_Piazza_della_Signoria%2C_Florence%2C_Italy_-_July_2006.jpg",
+      "map_query": "Villa Costanza Parcheggio Scandicci"
+    },
+    {
+      "id": "lucca_walls_bike",
+      "name": "Lucca – Fahrradrunde auf den Stadtmauern",
+      "category": ["Stadt & Kultur", "Aktiv"],
+      "popularity": 92,
+      "drive_min": 85,
+      "description": "4,2 km Ringpark auf den Mauern – schattig, autofrei, perfekt zum Cruisen & Espresso-Stopps.",
+      "planning": "Parkplätze am Rand (Piazzale Don Baroni u. a.). Leichte Runde, 25–40 Min. locker mit Rad.",
+      "organizing": "Mauern durchgehend zugänglich; Leihbikes an mehreren Toren; städtisches Bikesharing verfügbar.",
+      "links": [
+        {"title": "Comune Lucca – Info zu den Mauern", "url": "https://www.comune.lucca.it/vivere-il-comune/luoghi/le-mura-di-lucca-un-parco-urbano/"},
+        {"title": "Tourismus Lucca – Bike Sharing", "url": "https://www.turismo.lucca.it/en/bike-sharing"}
+      ],
+      "image": "https://upload.wikimedia.org/wikipedia/commons/4/47/Lucca_Mura_di_Lucca_2017.jpg",
+      "map_query": "Le Mura di Lucca noleggio bici"
+    },
+    {
+      "id": "lucca_sat_indie",
+      "name": "SA 20.09 – WØM FEST OFF (Indie/Electro) @ Distilleria Indie",
+      "category": ["Musik & Nightlife"],
+      "popularity": 90,
+      "drive_min": 110,
+      "description": "Open-Air Indie/Electro nahe Lucca (San Pietro in Campo/Barga). Line-up inkl. CROOKERS. Free Entry. Start ~18:30.",
+      "planning": "Kurvige, landschaftlich schöne Strecke; früh anfahren für Parken & Essen (Street-Food vor Ort).",
+      "organizing": "Eintritt frei; Details & Updates über Event-Seiten/SoMe checken.",
+      "links": [
+        {"title": "Bandsintown – Event", "url": "https://www.bandsintown.com/e/107346151-crookers-at-distilleria-indie"},
+        {"title": "WØM FEST – Instagram", "url": "https://www.instagram.com/wom_fest/"},
+        {"title": "Lucca What's On – Kalender", "url": "https://www.luccawhatson.com/calendar/wom-fest-1"}
+      ],
+      "image": "https://images.unsplash.com/photo-1516280030429-27679b3dc9cf?q=80&w=1400&auto=format&fit=crop",
+      "map_query": "Distilleria Indie San Pietro in Campo Barga"
+    },
+    {
+      "id": "bolgheri_viale_cipressi",
+      "name": "Bolgheri & Viale dei Cipressi – Wein & Ikonenstraße",
+      "category": ["Stadt & Kultur", "Wein"],
+      "popularity": 88,
+      "drive_min": 25,
+      "description": "5 km Zypressenallee ins mittelalterliche Bolgheri – Heimat der Supertuscans.",
+      "planning": "Golden-Hour-Fahrt; Parkflächen vor dem Ort, kurzer Fußweg durch das Tor.",
+      "organizing": "Kellereibesuche meist nur mit Voranmeldung (Consorzio bündelt Anfragen).",
+      "links": [
+        {"title": "Consorzio Bolgheri DOC – Experiences", "url": "https://www.bolgheridoc.com/en/experience-en/"},
+        {"title": "Visit Tuscany – Viale dei Cipressi", "url": "https://www.visittuscany.com/en/attractions/viale-cipressi-bolgheri/"}
+      ],
+      "image": "https://upload.wikimedia.org/wikipedia/commons/1/1d/Viale_dei_Cipressi_Bolgheri.jpg",
+      "map_query": "Viale dei Cipressi Bolgheri"
+    },
+    {
+      "id": "bibbona_beach",
+      "name": "Strand – Marina di Bibbona (Bandiera Blu)",
+      "category": ["Strand & Natur"],
+      "popularity": 86,
+      "drive_min": 25,
+      "description": "Breiter Sandstrand mit Dünen & Pinien, regelmäßig mit 'Blauer Flagge' ausgezeichnet.",
+      "planning": "Früh hin (Schatten in der Pineta, Parken), frei & Lidos gemischt.",
+      "organizing": "Freier Zugang; Lido-Öffnungszeiten variieren saisonal.",
+      "links": [
+        {"title": "Bandiera Blu 2025 – Elenco", "url": "https://www.bandierablu.org/common/blueflag.asp?anno=2025&tipo=bb"}
+      ],
+      "image": "https://upload.wikimedia.org/wikipedia/commons/f/f8/Marina_di_Bibbona%2C_litorale.jpg",
+      "map_query": "Marina di Bibbona spiaggia"
+    },
+    {
+      "id": "cecina_le_gorette",
+      "name": "Strand & Pineta – Marina di Cecina / Le Gorette (Bandiera Blu)",
+      "category": ["Strand & Natur"],
+      "popularity": 84,
+      "drive_min": 18,
+      "description": "Lange Sandbucht + schattige Pineta; 2025 Barrierefrei-Initiativen in Le Gorette.",
+      "planning": "Parken hinter der Pineta; kurze Wege zu freien Abschnitten.",
+      "organizing": "Öffentlicher Strand; Lidos tagesaktuell. Check lokale Hinweise zur barrierefreien Zone.",
+      "links": [
+        {"title": "CNR PDF – Bandiera Blu 2025 (Toscana-Liste inkl. Cecina)", "url": "https://www.cnr.it/it/news/allegato/3123"},
+        {"title": "Visit Cecina – Barrierefreie Spiaggia (News)", "url": "https://www.visitcecina.com/liberamente-una-spiaggia-per-tutti/"}
+      ],
+      "image": "https://upload.wikimedia.org/wikipedia/commons/5/5a/Cecina_Mare_lungomare.jpg",
+      "map_query": "Le Gorette Cecina spiaggia"
+    },
+    {
+      "id": "livorno_terrazza_acquario",
+      "name": "Livorno – Terrazza Mascagni & Acquario (Sunset + Aquarium)",
+      "category": ["Stadt & Kultur", "Strand & Natur"],
+      "popularity": 83,
+      "drive_min": 60,
+      "description": "Schachbrett-Promenade über dem Meer; Aquarium gleich nebenan – perfekt vor Sonnenuntergang.",
+      "planning": "Entlang Viale Italia parken; Sunset-Spaziergang, danach Aquarium.",
+      "organizing": "Aktionstage & Zeiten variieren; Onlinetickets sichern.",
+      "links": [
+        {"title": "Acquario – Offizielle Seite (Prezzi/Biglietti)", "url": "https://www.acquariodilivorno.it/"},
+        {"title": "Acquario – Orari/Avvisi", "url": "https://www.acquariodilivorno.it/aperture-e-orari"}
+      ],
+      "image": "https://upload.wikimedia.org/wikipedia/commons/7/73/Terrazza_Mascagni_Livorno.jpg",
+      "map_query": "Terrazza Mascagni Livorno"
+    },
+    {
+      "id": "populonia_baratti",
+      "name": "Populonia & Golfo di Baratti – Etrusker am Meer",
+      "category": ["Archäologie & Outdoor", "Strand & Natur"],
+      "popularity": 80,
+      "drive_min": 75,
+      "description": "Akropolis/Tempelreste über türkisfarbener Bucht; Nekropolen im Pinienwald.",
+      "planning": "Kombinierbar mit Badestopp in Baratti; kurze Anstiege, Sonnenhut.",
+      "organizing": "Saisonkalender beachten; Kombi-Tickets & Führungen verfügbar.",
+      "links": [
+        {"title": "Parchi Val di Cornia – Orari & Tariffe", "url": "https://www.parchivaldicornia.it/info-e-servizi/orari-e-tariffe/"},
+        {"title": "Acropoli di Populonia", "url": "https://www.parchivaldicornia.it/parchi-archeologici/parco-archeologico-di-baratti-e-populonia/acropoli-di-populonia/"}
+      ],
+      "image": "https://upload.wikimedia.org/wikipedia/commons/9/9c/Baratti_golfo.jpg",
+      "map_query": "Parco archeologico di Baratti e Populonia"
+    },
+    {
+      "id": "san_silvestro_minepark",
+      "name": "Parco Archeominerario di San Silvestro",
+      "category": ["Archäologie & Outdoor"],
+      "popularity": 78,
+      "drive_min": 70,
+      "description": "Stollen, Minenzüglein, Aussichtspfad zur Rocca – Archäologie zum Anfassen.",
+      "planning": "Feste Führungszeiten einplanen; feste Schuhe.",
+      "organizing": "Aktuelle Öffnungszeiten/Kombitickets im Verbund Parchi Val di Cornia.",
+      "links": [
+        {"title": "Parchi Val di Cornia – Info/Calendario", "url": "https://www.parchivaldicornia.it/info-e-servizi/orari-e-tariffe/"}
+      ],
+      "image": "https://upload.wikimedia.org/wikipedia/commons/2/29/Miniera_di_Valle_Genna%2C_Parco_archeominerario_di_San_Silvestro%2C_Campiglia_Marittima%2C_2018.jpg",
+      "map_query": "Parco archeominerario di San Silvestro"
+    },
+    {
+      "id": "casciana_terme",
+      "name": "Casciana Terme – Thermalbad (Day-Spa & Night-Session)",
+      "category": ["Wellness & Spa"],
+      "popularity": 75,
+      "drive_min": 50,
+      "description": "Traditions-Therme im Hügelland – angenehm warm, entspannend, unkompliziert.",
+      "planning": "Handtuch/Flipflops/Badekappe mitnehmen; Abend-Slot Do–So sehr stimmungsvoll.",
+      "organizing": "Aktuell: Do–Mo 10–19 & Abend 20–24 (Fr–So); Di/Mi geschlossen. Vorab reservieren.",
+      "links": [
+        {"title": "Terme di Casciana – Orari (offiziell)", "url": "https://www.termedicasciana.com/le-piscine/orari-di-apertura/"},
+        {"title": "Terme – Kontakt/Reservierung", "url": "https://www.termedicasciana.com/"}
+      ],
+      "image": "https://upload.wikimedia.org/wikipedia/commons/1/1d/Casciana_Terme_thermal_baths.jpg",
+      "map_query": "Terme di Casciana"
+    },
+    {
+      "id": "calidario_venturina",
+      "name": "Calidario Terme Etrusche (Venturina) – Naturquelle & Spa",
+      "category": ["Wellness & Spa"],
+      "popularity": 74,
+      "drive_min": 60,
+      "description": "Große Naturquelle + Thermarium; ruhiges Setting, gute Kombi mit Populonia/Baratti.",
+      "planning": "Slots (2–5 h) wählen; Handtuch/Flipflops.",
+      "organizing": "Öffnungszeiten Sep–Jan meist 9:30–20:30 (Sommer länger). Online reservieren.",
+      "links": [
+        {"title": "Calidario – Sorgente (Orari/Prezzi)", "url": "https://www.calidario.it/sorgente-naturale/"},
+        {"title": "Calidario – Thermarium (prenota)", "url": "https://www.calidario.it/prodotto/thermarium-2/"}
+      ],
+      "image": "https://upload.wikimedia.org/wikipedia/commons/1/1a/Calidario_Terme_Etrusche_-_Venturina.jpg",
+      "map_query": "Calidario Terme Etrusche"
+    },
+    {
+      "id": "volterra_city",
+      "name": "Volterra – Etrusker-Stadt & Alabaster",
+      "category": ["Stadt & Kultur", "Archäologie & Outdoor"],
+      "popularity": 73,
+      "drive_min": 55,
+      "description": "Authentischer Hügelort mit römischem Theater, Etruskermuseum & Alabaster-Handwerk.",
+      "planning": "Parkhäuser La Dogana/Docciola; Rolltreppe erleichtert den Aufstieg.",
+      "organizing": "Museen teils Montags reduziert; Kombitickets vor Ort.",
+      "links": [
+        {"title": "Volterra Turismo – Info & Parken", "url": "https://www.volterratur.it/"}
+      ],
+      "image": "https://upload.wikimedia.org/wikipedia/commons/0/0a/Volterra_panorama_2012.jpg",
+      "map_query": "Parcheggio La Dogana Volterra"
+    },
+    {
+      "id": "san_gimignano",
+      "name": "San Gimignano – 'Mittelalter-Skyline'",
+      "category": ["Stadt & Kultur"],
+      "popularity": 72,
+      "drive_min": 85,
+      "description": "Türme, Vernaccia & Weltkulturerbe – ideal als halber Tag.",
+      "planning": "Offizielle Parkplätze P1–P4 rund um die Stadt, ZTL beachten.",
+      "organizing": "Collegiata & Torre Grossa gut besucht; online/vor Ort Tickets.",
+      "links": [
+        {"title": "Comune San Gimignano – Parken", "url": "https://www.comune.sangimignano.si.it/it/page/parcheggi"}
+      ],
+      "image": "https://upload.wikimedia.org/wikipedia/commons/0/0c/San_Gimignano_view_2008.jpg",
+      "map_query": "Parcheggio San Gimignano P1"
+    },
+    {
+      "id": "maremma_park",
+      "name": "Parco della Maremma (Marina di Alberese) – Wild & Strand",
+      "category": ["Strand & Natur", "Archäologie & Outdoor"],
+      "popularity": 70,
+      "drive_min": 110,
+      "description": "Naturpark mit Hirschen, Pinien & langen, wilden Stränden – teils Shuttle/Bus-Zutritt.",
+      "planning": "Zutritt/Strandzufahrt im Sommer limitiert; ggf. Shuttle oder Rad (8 km) nutzen.",
+      "organizing": "Tickets/Infos im Besucherzentrum Alberese (täglich geöffnet; Zeiten saisonal).",
+      "links": [
+        {"title": "Parco Maremma – Info/Visita (offiziell)", "url": "https://parco-maremma.it/visita/informazioni/"},
+        {"title": "Parco Maremma – Orari apertura", "url": "https://parco-maremma.it/visita/orari-di-apertura/"}
+      ],
+      "image": "https://upload.wikimedia.org/wikipedia/commons/2/24/Parco_della_Maremma_-_Marina_di_Alberese.jpg",
+      "map_query": "Centro Visite Parco della Maremma Alberese"
+    }
+  ]
+}
