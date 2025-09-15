@@ -1,6 +1,6 @@
 import fs from 'fs';
 import path from 'path';
-import { loadItems } from '@/lib/trips';
+import { appleMapsLink, loadItems } from '@/lib/trips';
 
 describe('loadItems', () => {
   const dataDir = path.join(process.cwd(), 'data');
@@ -41,5 +41,23 @@ describe('loadItems', () => {
     fs.writeFileSync(tempFile, JSON.stringify(extra));
     const items = loadItems();
     expect(items.find((i) => i.id === 'extra_item')).toBeTruthy();
+  });
+
+  it('adds an Apple Maps link based on map_query', () => {
+    const items = loadItems();
+    const item = items[0];
+    const apple = item.links.find((l) => l.title === 'Apple Maps');
+    expect(apple).toBeTruthy();
+    expect(apple?.url).toContain('maps.apple.com');
+  });
+});
+
+describe('appleMapsLink', () => {
+  it('encodes query for driving directions', () => {
+    const link = appleMapsLink('San Francisco');
+    expect(link).toEqual({
+      title: 'Apple Maps',
+      url: 'https://maps.apple.com/?daddr=San%20Francisco&dirflg=d',
+    });
   });
 });
