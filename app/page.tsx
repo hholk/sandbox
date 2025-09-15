@@ -52,7 +52,9 @@ export default function Page() {
           </dl>
         </div>
       </header>
-      <nav className="sticky top-6 z-20 flex flex-wrap items-center gap-3 rounded-full bg-[#0f172a99] p-4 shadow-xl backdrop-blur">
+      <nav
+        className="sticky top-6 z-20 flex w-full items-center gap-3 overflow-x-auto rounded-full bg-[#0f172a99] p-4 shadow-xl backdrop-blur flex-nowrap lg:flex-wrap"
+      >
         {items.map((item) => (
           <a
             key={item.id}
@@ -72,7 +74,7 @@ export default function Page() {
             <article
               key={item.id}
               id={item.id}
-              className="glass-panel relative flex flex-col gap-5 overflow-hidden rounded-3xl border border-transparent p-6 transition hover:border-[var(--accent)] hover:shadow-[0_24px_60px_rgba(8,12,21,0.7)]"
+              className="glass-panel relative flex flex-col gap-5 overflow-hidden rounded-3xl border border-transparent p-6 transition hover:border-[var(--accent)] hover:shadow-[0_24px_60px_rgba(8,12,21,0.7)] scroll-mt-40"
             >
               <div className="space-y-4">
                 <div className="flex flex-wrap items-center justify-between gap-3">
