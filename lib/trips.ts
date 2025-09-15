@@ -45,6 +45,29 @@ export function appleMapsLink(query: string): Link {
   return { title: 'Apple Maps', url };
 }
 
+/**
+ * Convert a public Apple Maps URL into an app deeplink so iOS devices open
+ * the native Maps application directly. The transformation runs in O(1)
+ * time because it only inspects the URL components once.
+ *
+ * @example
+ * appleMapsAppUrl('https://maps.apple.com/?q=Berlin');
+ * // ➜ 'maps://?q=Berlin'
+ */
+export function appleMapsAppUrl(webUrl: string): string {
+  try {
+    const parsed = new URL(webUrl);
+    const path = parsed.pathname === '/' ? '' : parsed.pathname;
+    const suffix = `${path}${parsed.search ?? ''}`;
+    return suffix ? `maps://${suffix}` : 'maps://';
+  } catch {
+    const trimmed = webUrl.replace(/^https?:\/\//, '');
+    const slash = trimmed.indexOf('/');
+    const suffix = slash >= 0 ? trimmed.slice(slash) : '';
+    return suffix ? `maps://${suffix}` : 'maps://';
+  }
+}
+
 export interface TripData {
   meta: {
     base: string;
@@ -82,14 +105,19 @@ export function loadItems(): Item[] {
     if (item.apple_maps_url) {
       extra.push({ title: 'Apple Maps', url: item.apple_maps_url });
     }
-    if (item.apple_maps_deeplink) {
-      extra.push({ title: 'Apple Maps (App)', url: item.apple_maps_deeplink });
+    const appleMapAppUrl =
+      item.apple_maps_deeplink ?? (item.apple_maps_url ? appleMapsAppUrl(item.apple_maps_url) : undefined);
+    if (appleMapAppUrl) {
+      extra.push({ title: 'Apple Maps (App)', url: appleMapAppUrl });
     }
     if (item.apple_directions_url) {
       extra.push({ title: 'Apple Directions', url: item.apple_directions_url });
     }
-    if (item.apple_directions_deeplink) {
-      extra.push({ title: 'Apple Directions (App)', url: item.apple_directions_deeplink });
+    const appleDirectionsAppUrl =
+      item.apple_directions_deeplink ??
+      (item.apple_directions_url ? appleMapsAppUrl(item.apple_directions_url) : undefined);
+    if (appleDirectionsAppUrl) {
+      extra.push({ title: 'Apple Directions (App)', url: appleDirectionsAppUrl });
     }
     if (item.google_maps_url) {
       extra.push({ title: 'Google Maps', url: item.google_maps_url });
