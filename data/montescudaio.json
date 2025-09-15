@@ -21,6 +21,7 @@
         {"title": "Shuttle P+R Pietrasantina (Comune Pisa)", "url": "https://www.turismo.pisa.it/en/servizio/Shuttle-bus-Park-Pietrasantina-Lungarni-Bus-25"}
       ],
       "image": "https://upload.wikimedia.org/wikipedia/commons/4/4e/Pisa_-_Duomo_Baptistery_CampoSanto_Leaning_Tower.jpg",
+      "apple_maps_url": "https://maps.apple.com/?ll=43.7230,10.3966&q=Leaning%20Tower%20of%20Pisa",
       "map_query": "Pietrasantina Parking Pisa"
     },
     {
@@ -37,6 +38,7 @@
         {"title": "P+R Villa Costanza", "url": "https://parcheggiovillacostanza.it/it/"}
       ],
       "image": "https://upload.wikimedia.org/wikipedia/commons/4/4c/Panorama_of_Piazza_della_Signoria%2C_Florence%2C_Italy_-_July_2006.jpg",
+      "apple_maps_url": "https://maps.apple.com/?ll=43.7731,11.2556&q=Duomo%20di%20Firenze",
       "map_query": "Villa Costanza Parcheggio Scandicci"
     },
     {
@@ -53,6 +55,7 @@
         {"title": "Tourismus Lucca – Bike Sharing", "url": "https://www.turismo.lucca.it/en/bike-sharing"}
       ],
       "image": "https://upload.wikimedia.org/wikipedia/commons/4/47/Lucca_Mura_di_Lucca_2017.jpg",
+      "apple_maps_url": "https://maps.apple.com/?ll=43.8420,10.5050&q=Mura%20di%20Lucca",
       "map_query": "Le Mura di Lucca noleggio bici"
     },
     {
@@ -83,9 +86,11 @@
       "organizing": "Kellereibesuche meist nur mit Voranmeldung (Consorzio bündelt Anfragen).",
       "links": [
         {"title": "Consorzio Bolgheri DOC – Experiences", "url": "https://www.bolgheridoc.com/en/experience-en/"},
-        {"title": "Visit Tuscany – Viale dei Cipressi", "url": "https://www.visittuscany.com/en/attractions/viale-cipressi-bolgheri/"}
+        {"title": "Visit Tuscany – Viale dei Cipressi", "url": "https://www.visittuscany.com/en/attractions/viale-cipressi-bolgheri/"},
+        {"title": "Apple Maps – Bolgheri Dorf", "url": "https://maps.apple.com/?ll=43.2950,10.6140&q=Bolgheri"}
       ],
       "image": "https://upload.wikimedia.org/wikipedia/commons/1/1d/Viale_dei_Cipressi_Bolgheri.jpg",
+      "apple_maps_url": "https://maps.apple.com/?ll=43.3090,10.6075&q=Viale%20dei%20Cipressi",
       "map_query": "Viale dei Cipressi Bolgheri"
     },
     {
@@ -101,6 +106,7 @@
         {"title": "Bandiera Blu 2025 – Elenco", "url": "https://www.bandierablu.org/common/blueflag.asp?anno=2025&tipo=bb"}
       ],
       "image": "https://upload.wikimedia.org/wikipedia/commons/f/f8/Marina_di_Bibbona%2C_litorale.jpg",
+      "apple_maps_url": "https://maps.apple.com/?ll=43.2350,10.5320&q=Marina%20di%20Bibbona",
       "map_query": "Marina di Bibbona spiaggia"
     },
     {
@@ -117,6 +123,7 @@
         {"title": "Visit Cecina – Barrierefreie Spiaggia (News)", "url": "https://www.visitcecina.com/liberamente-una-spiaggia-per-tutti/"}
       ],
       "image": "https://upload.wikimedia.org/wikipedia/commons/5/5a/Cecina_Mare_lungomare.jpg",
+      "apple_maps_url": "https://maps.apple.com/?ll=43.3028,10.4872&q=Cecina%20Mare",
       "map_query": "Le Gorette Cecina spiaggia"
     },
     {
@@ -133,6 +140,7 @@
         {"title": "Acquario – Orari/Avvisi", "url": "https://www.acquariodilivorno.it/aperture-e-orari"}
       ],
       "image": "https://upload.wikimedia.org/wikipedia/commons/7/73/Terrazza_Mascagni_Livorno.jpg",
+      "apple_maps_url": "https://maps.apple.com/?ll=43.5353,10.2930&q=Terrazza%20Mascagni",
       "map_query": "Terrazza Mascagni Livorno"
     },
     {
@@ -149,6 +157,7 @@
         {"title": "Acropoli di Populonia", "url": "https://www.parchivaldicornia.it/parchi-archeologici/parco-archeologico-di-baratti-e-populonia/acropoli-di-populonia/"}
       ],
       "image": "https://upload.wikimedia.org/wikipedia/commons/9/9c/Baratti_golfo.jpg",
+      "apple_maps_url": "https://maps.apple.com/?ll=42.9590,10.5340&q=Populonia",
       "map_query": "Parco archeologico di Baratti e Populonia"
     },
     {
@@ -196,6 +205,7 @@
         {"title": "Calidario – Thermarium (prenota)", "url": "https://www.calidario.it/prodotto/thermarium-2/"}
       ],
       "image": "https://upload.wikimedia.org/wikipedia/commons/1/1a/Calidario_Terme_Etrusche_-_Venturina.jpg",
+      "apple_maps_url": "https://maps.apple.com/?ll=43.0248,10.6082&q=Calidario%20Terme%20Etrusche",
       "map_query": "Calidario Terme Etrusche"
     },
     {
@@ -211,6 +221,7 @@
         {"title": "Volterra Turismo – Info & Parken", "url": "https://www.volterratur.it/"}
       ],
       "image": "https://upload.wikimedia.org/wikipedia/commons/0/0a/Volterra_panorama_2012.jpg",
+      "apple_maps_url": "https://maps.apple.com/?ll=43.4010,10.8610&q=Volterra",
       "map_query": "Parcheggio La Dogana Volterra"
     },
     {
@@ -226,6 +237,7 @@
         {"title": "Comune San Gimignano – Parken", "url": "https://www.comune.sangimignano.si.it/it/page/parcheggi"}
       ],
       "image": "https://upload.wikimedia.org/wikipedia/commons/0/0c/San_Gimignano_view_2008.jpg",
+      "apple_maps_url": "https://maps.apple.com/?ll=43.4670,11.0420&q=San%20Gimignano",
       "map_query": "Parcheggio San Gimignano P1"
     },
     {
