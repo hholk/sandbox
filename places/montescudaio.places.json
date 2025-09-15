@@ -1,0 +1,366 @@
+{
+  "meta": {
+    "base": "Montescudaio",
+    "max_drive_min": 110,
+    "date_window": "2025",
+    "sort": "popularity_desc"
+  },
+  "items": [
+    {
+      "id": "bolgheri",
+      "name": "Bolgheri (Borgo & Zypressenallee)",
+      "category": "dorf",
+      "coords": {
+        "lat": 43.2509,
+        "lon": 10.6017
+      },
+      "duration_suggested_min": 90,
+      "price_hint": "kostenlos",
+      "popularity": 5,
+      "planning_tips": "Beste Zeit: golden hour. Parken am Ortseingang (teils kostenpflichtig).",
+      "organizing_tips": "Weinverkostungen vorab reservieren (Wochenenden schnell voll).",
+      "apple_maps_url": "https://maps.apple.com/?ll=43.250900,10.601700&q=Bolgheri",
+      "apple_maps_deeplink": "maps://?ll=43.250900,10.601700&q=Bolgheri",
+      "apple_directions_url": "https://maps.apple.com/?saddr=43.327200,10.636300&daddr=43.250900,10.601700&dirflg=d",
+      "apple_directions_deeplink": "maps://?saddr=43.327200,10.636300&daddr=43.250900,10.601700&dirflg=d",
+      "google_maps_url": "https://maps.google.com/?q=43.250900,10.601700",
+      "tags": [
+        "fotospot",
+        "wein",
+        "spaziergang"
+      ],
+      "map_query": "Bolgheri (Borgo & Zypressenallee)",
+      "drive_min": 20
+    },
+    {
+      "id": "volterra",
+      "name": "Volterra (Altstadt & Festung)",
+      "category": "stadt",
+      "coords": {
+        "lat": 43.401,
+        "lon": 10.8611
+      },
+      "duration_suggested_min": 180,
+      "price_hint": "gemischt",
+      "popularity": 5,
+      "planning_tips": "Anfahrt kurvig; vormittags oder später Nachmittag.",
+      "organizing_tips": "Museen & Festung: Öffnungszeiten saisonal – vorab prüfen.",
+      "apple_maps_url": "https://maps.apple.com/?ll=43.401000,10.861100&q=Volterra",
+      "apple_maps_deeplink": "maps://?ll=43.401000,10.861100&q=Volterra",
+      "apple_directions_url": "https://maps.apple.com/?saddr=43.327200,10.636300&daddr=43.401000,10.861100&dirflg=d",
+      "apple_directions_deeplink": "maps://?saddr=43.327200,10.636300&daddr=43.401000,10.861100&dirflg=d",
+      "google_maps_url": "https://maps.google.com/?q=43.401000,10.861100",
+      "tags": [
+        "aussicht",
+        "geschichte",
+        "altstadt"
+      ],
+      "map_query": "Volterra (Altstadt & Festung)",
+      "drive_min": 55
+    },
+    {
+      "id": "san-gimignano",
+      "name": "San Gimignano (Türme)",
+      "category": "stadt",
+      "coords": {
+        "lat": 43.467,
+        "lon": 11.042
+      },
+      "duration_suggested_min": 180,
+      "price_hint": "gemischt",
+      "popularity": 5,
+      "planning_tips": "Sehr beliebt – früh da sein. Parkhäuser P1–P3.",
+      "organizing_tips": "Torre Grossa Tickets online spart Wartezeit.",
+      "apple_maps_url": "https://maps.apple.com/?ll=43.467000,11.042000&q=San%20Gimignano",
+      "apple_maps_deeplink": "maps://?ll=43.467000,11.042000&q=San%20Gimignano",
+      "apple_directions_url": "https://maps.apple.com/?saddr=43.327200,10.636300&daddr=43.467000,11.042000&dirflg=d",
+      "apple_directions_deeplink": "maps://?saddr=43.327200,10.636300&daddr=43.467000,11.042000&dirflg=d",
+      "google_maps_url": "https://maps.google.com/?q=43.467000,11.042000",
+      "tags": [
+        "unesco",
+        "aussicht",
+        "gelato"
+      ],
+      "map_query": "San Gimignano (Türme)",
+      "drive_min": 80
+    },
+    {
+      "id": "pisa-tower",
+      "name": "Pisa – Piazza dei Miracoli (Schiefer Turm)",
+      "category": "landmark",
+      "coords": {
+        "lat": 43.723,
+        "lon": 10.3966
+      },
+      "duration_suggested_min": 120,
+      "price_hint": "bezahlt",
+      "popularity": 5,
+      "planning_tips": "Parken in P Via Pietrasantina (Park+Ride).",
+      "organizing_tips": "Turm-Aufstieg Slots vorab reservieren.",
+      "apple_maps_url": "https://maps.apple.com/?ll=43.723000,10.396600&q=Piazza%20dei%20Miracoli",
+      "apple_maps_deeplink": "maps://?ll=43.723000,10.396600&q=Piazza%20dei%20Miracoli",
+      "apple_directions_url": "https://maps.apple.com/?saddr=43.327200,10.636300&daddr=43.723000,10.396600&dirflg=d",
+      "apple_directions_deeplink": "maps://?saddr=43.327200,10.636300&daddr=43.723000,10.396600&dirflg=d",
+      "google_maps_url": "https://maps.google.com/?q=43.723000,10.396600",
+      "tags": [
+        "unesco",
+        "architektur"
+      ],
+      "map_query": "Pisa – Piazza dei Miracoli (Schiefer Turm)",
+      "drive_min": 55
+    },
+    {
+      "id": "lucca",
+      "name": "Lucca (Altstadt & Stadtmauer)",
+      "category": "stadt",
+      "coords": {
+        "lat": 43.8423,
+        "lon": 10.5016
+      },
+      "duration_suggested_min": 180,
+      "price_hint": "kostenlos",
+      "popularity": 5,
+      "planning_tips": "Parken außerhalb der Mauern (z.B. Parcheggio Mazzini).",
+      "organizing_tips": "Fahrradverleih für Rundweg oben auf der Mauer.",
+      "apple_maps_url": "https://maps.apple.com/?ll=43.842300,10.501600&q=Lucca",
+      "apple_maps_deeplink": "maps://?ll=43.842300,10.501600&q=Lucca",
+      "apple_directions_url": "https://maps.apple.com/?saddr=43.327200,10.636300&daddr=43.842300,10.501600&dirflg=d",
+      "apple_directions_deeplink": "maps://?saddr=43.327200,10.636300&daddr=43.842300,10.501600&dirflg=d",
+      "google_maps_url": "https://maps.google.com/?q=43.842300,10.501600",
+      "tags": [
+        "konzert",
+        "radfahren",
+        "altstadt"
+      ],
+      "map_query": "Lucca (Altstadt & Stadtmauer)",
+      "drive_min": 75
+    },
+    {
+      "id": "livorno-terrazza-mascagni",
+      "name": "Livorno – Terrazza Mascagni",
+      "category": "aussicht",
+      "coords": {
+        "lat": 43.5361,
+        "lon": 10.303
+      },
+      "duration_suggested_min": 60,
+      "price_hint": "kostenlos",
+      "popularity": 4,
+      "planning_tips": "Sonnenuntergang, Windjacke mitnehmen.",
+      "organizing_tips": "Freifläche, keine Tickets.",
+      "apple_maps_url": "https://maps.apple.com/?ll=43.536100,10.303000&q=Terrazza%20Mascagni",
+      "apple_maps_deeplink": "maps://?ll=43.536100,10.303000&q=Terrazza%20Mascagni",
+      "apple_directions_url": "https://maps.apple.com/?saddr=43.327200,10.636300&daddr=43.536100,10.303000&dirflg=d",
+      "apple_directions_deeplink": "maps://?saddr=43.327200,10.636300&daddr=43.536100,10.303000&dirflg=d",
+      "google_maps_url": "https://maps.google.com/?q=43.536100,10.303000",
+      "tags": [
+        "meer",
+        "fotospot"
+      ],
+      "map_query": "Livorno – Terrazza Mascagni",
+      "drive_min": 50
+    },
+    {
+      "id": "spiagge-bianche-vada",
+      "name": "Spiagge Bianche (Vada)",
+      "category": "strand",
+      "coords": {
+        "lat": 43.3603,
+        "lon": 10.4405
+      },
+      "duration_suggested_min": 180,
+      "price_hint": "kostenlos",
+      "popularity": 4,
+      "planning_tips": "Früh anreisen; Schatten selbst mitbringen.",
+      "organizing_tips": "Freier Strand, keine Reservierung.",
+      "apple_maps_url": "https://maps.apple.com/?ll=43.360300,10.440500&q=Spiagge%20Bianche",
+      "apple_maps_deeplink": "maps://?ll=43.360300,10.440500&q=Spiagge%20Bianche",
+      "apple_directions_url": "https://maps.apple.com/?saddr=43.327200,10.636300&daddr=43.360300,10.440500&dirflg=d",
+      "apple_directions_deeplink": "maps://?saddr=43.327200,10.636300&daddr=43.360300,10.440500&dirflg=d",
+      "google_maps_url": "https://maps.google.com/?q=43.360300,10.440500",
+      "tags": [
+        "strand",
+        "baden"
+      ],
+      "map_query": "Spiagge Bianche (Vada)",
+      "drive_min": 25
+    },
+    {
+      "id": "marina-di-cecina",
+      "name": "Marina di Cecina (Strandpromenade)",
+      "category": "strand",
+      "coords": {
+        "lat": 43.309,
+        "lon": 10.489
+      },
+      "duration_suggested_min": 120,
+      "price_hint": "gemischt",
+      "popularity": 3,
+      "planning_tips": "Kurztrip für ein schnelles Bad.",
+      "organizing_tips": "Beach Clubs teils reservierungspflichtig in Hochsaison.",
+      "apple_maps_url": "https://maps.apple.com/?ll=43.309000,10.489000&q=Marina%20di%20Cecina",
+      "apple_maps_deeplink": "maps://?ll=43.309000,10.489000&q=Marina%20di%20Cecina",
+      "apple_directions_url": "https://maps.apple.com/?saddr=43.327200,10.636300&daddr=43.309000,10.489000&dirflg=d",
+      "apple_directions_deeplink": "maps://?saddr=43.327200,10.636300&daddr=43.309000,10.489000&dirflg=d",
+      "google_maps_url": "https://maps.google.com/?q=43.309000,10.489000",
+      "tags": [
+        "strand",
+        "essen"
+      ],
+      "map_query": "Marina di Cecina (Strandpromenade)",
+      "drive_min": 15
+    },
+    {
+      "id": "castagneto-carducci",
+      "name": "Castagneto Carducci",
+      "category": "dorf",
+      "coords": {
+        "lat": 43.1569,
+        "lon": 10.6071
+      },
+      "duration_suggested_min": 90,
+      "price_hint": "kostenlos",
+      "popularity": 4,
+      "planning_tips": "Kleine Gassen; bequeme Schuhe.",
+      "organizing_tips": "Kleine Läden siesta beachten.",
+      "apple_maps_url": "https://maps.apple.com/?ll=43.156900,10.607100&q=Castagneto%20Carducci",
+      "apple_maps_deeplink": "maps://?ll=43.156900,10.607100&q=Castagneto%20Carducci",
+      "apple_directions_url": "https://maps.apple.com/?saddr=43.327200,10.636300&daddr=43.156900,10.607100&dirflg=d",
+      "apple_directions_deeplink": "maps://?saddr=43.327200,10.636300&daddr=43.156900,10.607100&dirflg=d",
+      "google_maps_url": "https://maps.google.com/?q=43.156900,10.607100",
+      "tags": [
+        "aussicht",
+        "wein"
+      ],
+      "map_query": "Castagneto Carducci",
+      "drive_min": 30
+    },
+    {
+      "id": "calidario-terme",
+      "name": "Calidario Terme Etrusche (Venturina Terme)",
+      "category": "therme",
+      "coords": {
+        "lat": 43.0454,
+        "lon": 10.6069
+      },
+      "duration_suggested_min": 120,
+      "price_hint": "bezahlt",
+      "popularity": 4,
+      "planning_tips": "Handtuch & Badeschuhe.",
+      "organizing_tips": "Zeitslots online reservieren.",
+      "apple_maps_url": "https://maps.apple.com/?ll=43.045400,10.606900&q=Calidario%20Terme%20Etrusche",
+      "apple_maps_deeplink": "maps://?ll=43.045400,10.606900&q=Calidario%20Terme%20Etrusche",
+      "apple_directions_url": "https://maps.apple.com/?saddr=43.327200,10.636300&daddr=43.045400,10.606900&dirflg=d",
+      "apple_directions_deeplink": "maps://?saddr=43.327200,10.636300&daddr=43.045400,10.606900&dirflg=d",
+      "google_maps_url": "https://maps.google.com/?q=43.045400,10.606900",
+      "tags": [
+        "wellness",
+        "baden"
+      ],
+      "map_query": "Calidario Terme Etrusche (Venturina Terme)",
+      "drive_min": 45
+    },
+    {
+      "id": "cala-violina",
+      "name": "Cala Violina",
+      "category": "strand",
+      "coords": {
+        "lat": 42.8147,
+        "lon": 10.8005
+      },
+      "duration_suggested_min": 180,
+      "price_hint": "kostenlos",
+      "popularity": 4,
+      "planning_tips": "Fußweg vom Parkplatz (ca. 20–30 Min). Wasser & Snacks mitnehmen.",
+      "organizing_tips": "In Hochsaison Zugang teils limitiert – vorab prüfen.",
+      "apple_maps_url": "https://maps.apple.com/?ll=42.814700,10.800500&q=Cala%20Violina",
+      "apple_maps_deeplink": "maps://?ll=42.814700,10.800500&q=Cala%20Violina",
+      "apple_directions_url": "https://maps.apple.com/?saddr=43.327200,10.636300&daddr=42.814700,10.800500&dirflg=d",
+      "apple_directions_deeplink": "maps://?saddr=43.327200,10.636300&daddr=42.814700,10.800500&dirflg=d",
+      "google_maps_url": "https://maps.google.com/?q=42.814700,10.800500",
+      "tags": [
+        "strand",
+        "wanderung",
+        "fotospot"
+      ],
+      "map_query": "Cala Violina",
+      "drive_min": 80
+    },
+    {
+      "id": "firenze-duomo",
+      "name": "Florenz – Dom/Santa Maria del Fiore",
+      "category": "stadt",
+      "coords": {
+        "lat": 43.7731,
+        "lon": 11.2556
+      },
+      "duration_suggested_min": 240,
+      "price_hint": "bezahlt",
+      "popularity": 5,
+      "planning_tips": "Park & Ride Scandicci + Tram; Innenstadtdriving vermeiden.",
+      "organizing_tips": "Kuppel & Glockenturm Slots vorab buchen.",
+      "apple_maps_url": "https://maps.apple.com/?ll=43.773100,11.255600&q=Duomo%20di%20Firenze",
+      "apple_maps_deeplink": "maps://?ll=43.773100,11.255600&q=Duomo%20di%20Firenze",
+      "apple_directions_url": "https://maps.apple.com/?saddr=43.327200,10.636300&daddr=43.773100,11.255600&dirflg=d",
+      "apple_directions_deeplink": "maps://?saddr=43.327200,10.636300&daddr=43.773100,11.255600&dirflg=d",
+      "google_maps_url": "https://maps.google.com/?q=43.773100,11.255600",
+      "tags": [
+        "unesco",
+        "kunst",
+        "architektur"
+      ],
+      "map_query": "Florenz – Dom/Santa Maria del Fiore",
+      "drive_min": 110
+    },
+    {
+      "id": "forte-dei-marmi",
+      "name": "Forte dei Marmi",
+      "category": "strand",
+      "coords": {
+        "lat": 43.9621,
+        "lon": 10.1756
+      },
+      "duration_suggested_min": 180,
+      "price_hint": "gemischt",
+      "popularity": 3,
+      "planning_tips": "Beach Clubs oft teuer; Preise vergleichen.",
+      "organizing_tips": "In der Saison Liegen vorab reservieren.",
+      "apple_maps_url": "https://maps.apple.com/?ll=43.962100,10.175600&q=Forte%20dei%20Marmi",
+      "apple_maps_deeplink": "maps://?ll=43.962100,10.175600&q=Forte%20dei%20Marmi",
+      "apple_directions_url": "https://maps.apple.com/?saddr=43.327200,10.636300&daddr=43.962100,10.175600&dirflg=d",
+      "apple_directions_deeplink": "maps://?saddr=43.327200,10.636300&daddr=43.962100,10.175600&dirflg=d",
+      "google_maps_url": "https://maps.google.com/?q=43.962100,10.175600",
+      "tags": [
+        "strand",
+        "shopping"
+      ],
+      "map_query": "Forte dei Marmi",
+      "drive_min": 90
+    },
+    {
+      "id": "populonia",
+      "name": "Populonia & Golfo di Baratti",
+      "category": "geschichte",
+      "coords": {
+        "lat": 42.9756,
+        "lon": 10.5159
+      },
+      "duration_suggested_min": 150,
+      "price_hint": "gemischt",
+      "popularity": 3,
+      "planning_tips": "Kombinierbar mit Strand Baratti.",
+      "organizing_tips": "Archäologischer Park: Zeiten variieren.",
+      "apple_maps_url": "https://maps.apple.com/?ll=42.975600,10.515900&q=Populonia",
+      "apple_maps_deeplink": "maps://?ll=42.975600,10.515900&q=Populonia",
+      "apple_directions_url": "https://maps.apple.com/?saddr=43.327200,10.636300&daddr=42.975600,10.515900&dirflg=d",
+      "apple_directions_deeplink": "maps://?saddr=43.327200,10.636300&daddr=42.975600,10.515900&dirflg=d",
+      "google_maps_url": "https://maps.google.com/?q=42.975600,10.515900",
+      "tags": [
+        "geschichte",
+        "strand"
+      ],
+      "map_query": "Populonia & Golfo di Baratti",
+      "drive_min": 50
+    }
+  ]
+}
