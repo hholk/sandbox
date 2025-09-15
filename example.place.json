@@ -1,0 +1,18 @@
+{
+  "id": "example-place",
+  "name": "Example Place",
+  "category": "example",
+  "coords": { "lat": 0.0, "lon": 0.0 },
+  "drive_time_min": 0,
+  "duration_suggested_min": 0,
+  "price_hint": "kostenlos",
+  "popularity": 0,
+  "planning_tips": "Planungshinweise hier einfügen.",
+  "organizing_tips": "Organisationshinweise hier einfügen.",
+  "apple_maps_url": "https://maps.apple.com/?ll=0,0&q=Example%20Place",
+  "apple_maps_deeplink": "maps://?ll=0,0&q=Example%20Place",
+  "apple_directions_url": "https://maps.apple.com/?saddr=0,0&daddr=0,0&dirflg=d",
+  "apple_directions_deeplink": "maps://?saddr=0,0&daddr=0,0&dirflg=d",
+  "google_maps_url": "https://maps.google.com/?q=0,0",
+  "tags": ["beispiel"]
+}
