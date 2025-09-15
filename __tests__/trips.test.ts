@@ -7,6 +7,7 @@ describe('loadItems', () => {
   const tempFile = path.join(dataDir, 'temp_test.json');
 
   afterEach(() => {
+    jest.restoreAllMocks();
     if (fs.existsSync(tempFile)) {
       fs.unlinkSync(tempFile);
     }
@@ -41,6 +42,29 @@ describe('loadItems', () => {
     fs.writeFileSync(tempFile, JSON.stringify(extra));
     const items = loadItems();
     expect(items.find((i) => i.id === 'extra_item')).toBeTruthy();
+  });
+
+  it('falls back to the bundled dataset when disk access fails', () => {
+    jest.spyOn(fs, 'existsSync').mockReturnValue(true);
+    jest.spyOn(fs, 'readdirSync').mockImplementation(() => {
+      throw new Error('boom');
+    });
+    const warn = jest.spyOn(console, 'warn').mockImplementation(() => {});
+    const items = loadItems();
+    expect(items.some((i) => i.id === 'pisa_miracoli_tower')).toBe(true);
+    expect(warn).toHaveBeenCalled();
+  });
+
+  it('does not leak mutations between calls', () => {
+    const first = loadItems();
+    const mutated = first[0];
+    mutated.links = [...(mutated.links ?? []), { title: 'Test', url: 'https://example.org' }];
+    mutated.tags = [...(mutated.tags ?? []), 'mutated'];
+    const second = loadItems();
+    const fresh = second.find((item) => item.id === mutated.id);
+    expect(fresh).toBeTruthy();
+    expect(fresh?.links?.some((l) => l.url === 'https://example.org')).toBe(false);
+    expect((fresh?.tags ?? []).includes('mutated')).toBe(false);
   });
 
   it('adds an Apple Maps link based on map_query', () => {

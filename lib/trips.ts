@@ -1,5 +1,6 @@
 import fs from 'fs';
 import path from 'path';
+import { staticTrips } from '@/data/static-trips';
 
 export interface Link {
   title: string;
@@ -80,24 +81,61 @@ export interface TripData {
 
 const dataDir = path.join(process.cwd(), 'data');
 
-export function loadTrips(): TripData[] {
-  const files = fs.readdirSync(dataDir).filter((f) => f.endsWith('.json'));
-  return files.map((file) => {
+function cloneTrips(trips: ReadonlyArray<TripData>): TripData[] {
+  return trips.map((trip) => ({
+    meta: { ...trip.meta },
+    items: trip.items.map((item) => ({
+      ...item,
+      category: Array.isArray(item.category) ? [...item.category] : item.category,
+      links: item.links?.map((link) => ({ ...link })),
+      tags: item.tags ? [...item.tags] : undefined,
+      coords: item.coords ? { ...item.coords } : undefined,
+    })),
+  }));
+}
+
+function readTripsFromDisk(): TripData[] {
+  const files = fs.existsSync(dataDir)
+    ? fs.readdirSync(dataDir).filter((f) => f.endsWith('.json'))
+    : [];
+  if (files.length === 0) {
+    throw new Error('No JSON trip files found on disk');
+  }
+  const trips = files.map((file) => {
     const full = path.join(dataDir, file);
-    return JSON.parse(fs.readFileSync(full, 'utf-8')) as TripData;
+    const raw = fs.readFileSync(full, 'utf-8');
+    return JSON.parse(raw) as TripData;
   });
+  return cloneTrips(trips);
+}
+
+export function loadTrips(): TripData[] {
+  try {
+    return readTripsFromDisk();
+  } catch (error) {
+    if (process.env.NODE_ENV !== 'production') {
+      console.warn('Falling back to bundled trip data:', error);
+    }
+    return cloneTrips(staticTrips);
+  }
 }
 
 export function loadItems(): Item[] {
-  const trips = loadTrips();
-  const items = trips.flatMap((t) => t.items);
+  const items = loadTrips()
+    .flatMap((trip) => trip.items)
+    .map((item) => ({
+      ...item,
+      category: Array.isArray(item.category) ? [...item.category] : item.category,
+      links: item.links ? [...item.links] : undefined,
+      tags: item.tags ? [...item.tags] : undefined,
+      coords: item.coords ? { ...item.coords } : undefined,
+    }));
   items.sort((a, b) => (b.popularity ?? 0) - (a.popularity ?? 0));
   items.forEach((item) => {
+    const links: Link[] = [...(item.links ?? [])];
     if (item.map_query && item.map_query.trim()) {
       const link = appleMapsLink(item.map_query);
-      const links = item.links ?? (item.links = []);
-      const exists = links.some((l) => l.url === link.url);
-      if (!exists) {
+      if (!links.some((l) => l.url === link.url)) {
         links.unshift(link);
       }
     }
@@ -123,13 +161,13 @@ export function loadItems(): Item[] {
       extra.push({ title: 'Google Maps', url: item.google_maps_url });
     }
     if (extra.length) {
-      const links = item.links ?? (item.links = []);
       extra.forEach((l) => {
         if (!links.some((existing) => existing.url === l.url)) {
           links.push(l);
         }
       });
     }
+    item.links = links.length ? links : undefined;
   });
   return items;
 }
