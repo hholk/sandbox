@@ -1,6 +1,6 @@
 import fs from 'fs';
 import path from 'path';
-import { appleMapsLink, loadItems } from '@/lib/trips';
+import { appleMapsAppUrl, appleMapsLink, loadItems } from '@/lib/trips';
 
 describe('loadItems', () => {
   const dataDir = path.join(process.cwd(), 'data');
@@ -49,6 +49,9 @@ describe('loadItems', () => {
     const apple = item.links?.find((l) => l.title === 'Apple Maps');
     expect(apple).toBeTruthy();
     expect(apple?.url).toContain('maps.apple.com');
+    const appleApp = item.links?.find((l) => l.title === 'Apple Maps (App)');
+    expect(appleApp).toBeTruthy();
+    expect(appleApp?.url.startsWith('maps://')).toBe(true);
   });
 
   it('exposes provided apple_maps_url links from dataset items', () => {
@@ -59,6 +62,10 @@ describe('loadItems', () => {
       l.url.startsWith('https://maps.apple.com/?ll=43.7230,10.3966')
     );
     expect(direct).toBeTruthy();
+    const directApp = pisa?.links?.find((l) =>
+      l.url.startsWith('maps://?ll=43.7230,10.3966')
+    );
+    expect(directApp).toBeTruthy();
   });
 
   it('retains optional fields and builds map links', () => {
@@ -86,6 +93,8 @@ describe('loadItems', () => {
     expect(item?.coords).toEqual({ lat: 1, lon: 2 });
     const google = item?.links?.find((l) => l.url.includes('google.com'));
     expect(google).toBeTruthy();
+    const appleApp = item?.links?.find((l) => l.url.startsWith('maps://?q=1,2'));
+    expect(appleApp).toBeTruthy();
     expect(item?.tags).toEqual(['a', 'b']);
   });
 });
@@ -97,5 +106,14 @@ describe('appleMapsLink', () => {
       title: 'Apple Maps',
       url: 'https://maps.apple.com/?daddr=San%20Francisco&dirflg=d',
     });
+  });
+});
+
+describe('appleMapsAppUrl', () => {
+  it('converts web URLs to deeplinks for the Apple Maps app', () => {
+    expect(appleMapsAppUrl('https://maps.apple.com/?q=Berlin')).toBe('maps://?q=Berlin');
+    expect(
+      appleMapsAppUrl('https://maps.apple.com/?ll=43.7230,10.3966&q=Leaning%20Tower%20of%20Pisa')
+    ).toBe('maps://?ll=43.7230,10.3966&q=Leaning%20Tower%20of%20Pisa');
   });
 });
