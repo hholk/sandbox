@@ -19,6 +19,8 @@ pnpm quality
 
 Deploy on [Vercel](https://vercel.com). Use the Node.js runtime. Install command `pnpm install` and build command `pnpm build`. Optional cron warmup is defined in `vercel.json`.
 
+Trip data is bundled for hobby-tier deployments. When the read-only file system blocks access to `/data`, the loader falls back to the compiled dataset and keeps every call immutable.
+
 ## Limits
 
 - Deribit public API is cached on the server for 30s and revalidated on the client every 60s.
@@ -60,3 +62,14 @@ provides driving directions in CarPlay and is derived from `map_query`.
   "map_query": "Example Place"
 }
 ```
+
+## Usage Example
+
+```ts
+import { loadItems } from '@/lib/trips';
+
+const items = loadItems();
+const scenicTrips = items.filter((item) => item.tags?.includes('Strand'));
+```
+
+`loadItems` clones the dataset on each call in O(n) time, so mutating `items` does not impact subsequent renders.
