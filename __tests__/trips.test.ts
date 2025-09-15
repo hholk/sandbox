@@ -51,6 +51,16 @@ describe('loadItems', () => {
     expect(apple?.url).toContain('maps.apple.com');
   });
 
+  it('exposes provided apple_maps_url links from dataset items', () => {
+    const items = loadItems();
+    const pisa = items.find((i) => i.id === 'pisa_miracoli_tower');
+    expect(pisa).toBeTruthy();
+    const direct = pisa?.links?.find((l) =>
+      l.url.startsWith('https://maps.apple.com/?ll=43.7230,10.3966')
+    );
+    expect(direct).toBeTruthy();
+  });
+
   it('retains optional fields and builds map links', () => {
     const extra = {
       meta: { base: 'Test', max_drive_min: 1, date_window: '', sort: 'popularity_desc' },
