@@ -20,6 +20,19 @@ export interface Item {
   map_query: string;
 }
 
+/**
+ * Create a link to Apple Maps with driving directions for CarPlay.
+ * Runs in O(n) time where n is the length of the query due to encoding.
+ */
+export function appleMapsLink(query: string): Link {
+  const q = query.trim();
+  if (!q) {
+    throw new Error('map_query is required to build Apple Maps link');
+  }
+  const url = `https://maps.apple.com/?daddr=${encodeURIComponent(q)}&dirflg=d`;
+  return { title: 'Apple Maps', url };
+}
+
 export interface TripData {
   meta: {
     base: string;
@@ -44,5 +57,14 @@ export function loadItems(): Item[] {
   const trips = loadTrips();
   const items = trips.flatMap((t) => t.items);
   items.sort((a, b) => b.popularity - a.popularity);
+  items.forEach((item) => {
+    if (item.map_query.trim()) {
+      const link = appleMapsLink(item.map_query);
+      const exists = item.links.some((l) => l.url === link.url);
+      if (!exists) {
+        item.links.unshift(link);
+      }
+    }
+  });
   return items;
 }
