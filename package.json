@@ -13,6 +13,7 @@
     "quality": "node quality.js"
   },
   "dependencies": {
+    "geist": "^1.5.1",
     "next": "15.5.0",
     "react": "19.1.0",
     "react-dom": "19.1.0"
