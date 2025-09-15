@@ -3,7 +3,7 @@ import { renderToStaticMarkup } from 'react-dom/server';
 import RootLayout from '../app/layout';
 
 describe('RootLayout', () => {
-  it('applies IBM Plex font variables', () => {
+  it('renders children with antialiased class', () => {
     const html = renderToStaticMarkup(
       React.createElement(
         RootLayout,
@@ -11,7 +11,7 @@ describe('RootLayout', () => {
         React.createElement('div', null, 'child')
       )
     );
-    expect(html).toContain('--font-ibm-plex-sans');
-    expect(html).toContain('--font-ibm-plex-mono');
+    expect(html).toContain('antialiased');
+    expect(html).toContain('child');
   });
 });

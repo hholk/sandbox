@@ -1,4 +1,3 @@
-import Image from 'next/image';
 import { loadItems } from '@/lib/trips';
 
 export default function Page() {
@@ -23,11 +22,12 @@ export default function Page() {
           className="mb-12 rounded-lg bg-[#2a2a2a] p-6 shadow"
         >
           <h2 className="mb-4 text-2xl font-bold text-accent">{item.name}</h2>
-          <Image
+          <img
             src={item.image}
             alt={item.name}
             width={800}
             height={400}
+            loading="lazy"
             className="mb-4 h-auto w-full rounded"
           />
           <p className="mb-2 text-foreground">{item.description}</p>
