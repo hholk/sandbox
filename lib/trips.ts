@@ -9,15 +9,27 @@ export interface Link {
 export interface Item {
   id: string;
   name: string;
-  category: string[];
-  popularity: number;
-  drive_min: number;
-  description: string;
-  planning: string;
-  organizing: string;
-  links: Link[];
-  image: string;
-  map_query: string;
+  category: string | string[];
+  popularity?: number;
+  drive_min?: number;
+  drive_time_min?: number;
+  description?: string;
+  planning?: string;
+  planning_tips?: string;
+  organizing?: string;
+  organizing_tips?: string;
+  links?: Link[];
+  image?: string;
+  map_query?: string;
+  duration_suggested_min?: number;
+  price_hint?: string;
+  coords?: { lat: number; lon: number };
+  apple_maps_url?: string;
+  apple_maps_deeplink?: string;
+  apple_directions_url?: string;
+  apple_directions_deeplink?: string;
+  google_maps_url?: string;
+  tags?: string[];
 }
 
 /**
@@ -56,14 +68,39 @@ export function loadTrips(): TripData[] {
 export function loadItems(): Item[] {
   const trips = loadTrips();
   const items = trips.flatMap((t) => t.items);
-  items.sort((a, b) => b.popularity - a.popularity);
+  items.sort((a, b) => (b.popularity ?? 0) - (a.popularity ?? 0));
   items.forEach((item) => {
-    if (item.map_query.trim()) {
+    if (item.map_query && item.map_query.trim()) {
       const link = appleMapsLink(item.map_query);
-      const exists = item.links.some((l) => l.url === link.url);
+      const links = item.links ?? (item.links = []);
+      const exists = links.some((l) => l.url === link.url);
       if (!exists) {
-        item.links.unshift(link);
+        links.unshift(link);
       }
+    }
+    const extra: Link[] = [];
+    if (item.apple_maps_url) {
+      extra.push({ title: 'Apple Maps', url: item.apple_maps_url });
+    }
+    if (item.apple_maps_deeplink) {
+      extra.push({ title: 'Apple Maps (App)', url: item.apple_maps_deeplink });
+    }
+    if (item.apple_directions_url) {
+      extra.push({ title: 'Apple Directions', url: item.apple_directions_url });
+    }
+    if (item.apple_directions_deeplink) {
+      extra.push({ title: 'Apple Directions (App)', url: item.apple_directions_deeplink });
+    }
+    if (item.google_maps_url) {
+      extra.push({ title: 'Google Maps', url: item.google_maps_url });
+    }
+    if (extra.length) {
+      const links = item.links ?? (item.links = []);
+      extra.forEach((l) => {
+        if (!links.some((existing) => existing.url === l.url)) {
+          links.push(l);
+        }
+      });
     }
   });
   return items;

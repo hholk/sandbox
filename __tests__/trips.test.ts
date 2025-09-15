@@ -46,9 +46,37 @@ describe('loadItems', () => {
   it('adds an Apple Maps link based on map_query', () => {
     const items = loadItems();
     const item = items[0];
-    const apple = item.links.find((l) => l.title === 'Apple Maps');
+    const apple = item.links?.find((l) => l.title === 'Apple Maps');
     expect(apple).toBeTruthy();
     expect(apple?.url).toContain('maps.apple.com');
+  });
+
+  it('retains optional fields and builds map links', () => {
+    const extra = {
+      meta: { base: 'Test', max_drive_min: 1, date_window: '', sort: 'popularity_desc' },
+      items: [
+        {
+          id: 'optional_item',
+          name: 'Optional Item',
+          category: 'test',
+          drive_time_min: 5,
+          duration_suggested_min: 10,
+          price_hint: 'kostenlos',
+          coords: { lat: 1, lon: 2 },
+          apple_maps_url: 'https://maps.apple.com/?q=1,2',
+          google_maps_url: 'https://maps.google.com/?q=1,2',
+          tags: ['a', 'b']
+        }
+      ]
+    };
+    fs.writeFileSync(tempFile, JSON.stringify(extra));
+    const items = loadItems();
+    const item = items.find((i) => i.id === 'optional_item');
+    expect(item?.price_hint).toBe('kostenlos');
+    expect(item?.coords).toEqual({ lat: 1, lon: 2 });
+    const google = item?.links?.find((l) => l.url.includes('google.com'));
+    expect(google).toBeTruthy();
+    expect(item?.tags).toEqual(['a', 'b']);
   });
 });
 
