@@ -73,3 +73,11 @@ const scenicTrips = items.filter((item) => item.tags?.includes('Strand'));
 ```
 
 `loadItems` clones the dataset on each call in O(n) time, so mutating `items` does not impact subsequent renders.
+
+```tsx
+<nav className="flex w-full items-center gap-3 overflow-x-auto rounded-full flex-nowrap lg:flex-wrap">
+  {/* Trip shortcuts */}
+</nav>
+```
+
+The horizontal overflow keeps the sticky navigation compact on small screens while preserving wrapped chips on larger viewports.
