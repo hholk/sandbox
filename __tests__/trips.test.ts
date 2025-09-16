@@ -6,6 +6,7 @@ import { ALLOWED_IMAGE_HOSTS } from '@/lib/image-proxy';
 describe('loadItems', () => {
   const dataDir = path.join(process.cwd(), 'data');
   const tempFile = path.join(dataDir, 'temp_test.json');
+  const publicDir = path.join(process.cwd(), 'public');
 
   afterEach(() => {
     jest.restoreAllMocks();
@@ -123,13 +124,17 @@ describe('loadItems', () => {
     expect(item?.tags).toEqual(['a', 'b']);
   });
 
-  it('only references images from allowed hosts', () => {
+  it('only references images from allowed hosts or bundled assets', () => {
     const items = loadItems();
     const invalid = items
       .filter((item) => Boolean(item.image))
       .filter((item) => {
         if (!item.image) {
           return false;
+        }
+        if (item.image.startsWith('/')) {
+          const diskPath = path.join(publicDir, item.image.replace(/^\/+/, ''));
+          return !fs.existsSync(diskPath);
         }
         try {
           const host = new URL(item.image).hostname;

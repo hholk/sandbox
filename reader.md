@@ -8,12 +8,13 @@
 ## Data Sources
 - Primary JSON datasets live in `data/*.json` with the bundled fallback defined in `data/static-trips.ts`.
 - Loader utilities (`loadTrips`, `loadItems`) clone data defensively to preserve immutability and maintain O(n) complexity per request.
+- Hero imagery is sourced from authoritative remote hosts (Commons, ticket portals) and cached lazily through `/api/image` so deployments stay lightweight.
 - Apple/Google Maps links are synthesized in `lib/trips.ts`; keep new data aligned with the `Item` interface.
 
 ## Architecture Overview
 - Next.js 15 App Router with a single page composed of server components, styled via Tailwind + custom CSS tokens.
 - Shared UI idioms: `glass-panel` shells, sticky horizontal filters, card hover glow, and accent-forward CTAs.
-- Image proxying handled through `/lib/image-proxy` and `/api/image` to whitelist hosts and supply cached responses.
+- `resolveImageSrc` in `lib/image-proxy.ts` decides whether to serve local assets or proxy remote hosts through `/api/image`, keeping SSRF guards intact.
 
 ## Usage Example
 ```ts

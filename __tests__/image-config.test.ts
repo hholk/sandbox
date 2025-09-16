@@ -1,4 +1,9 @@
-import { buildImageProxyUrl, isAllowedImageHost } from '@/lib/image-proxy';
+import {
+  buildImageProxyUrl,
+  isAllowedImageHost,
+  isRemoteImageSource,
+  resolveImageSrc,
+} from '@/lib/image-proxy';
 
 describe('image proxy helpers', () => {
   it('builds a proxied url with encoded source', () => {
@@ -14,5 +19,20 @@ describe('image proxy helpers', () => {
     expect(isAllowedImageHost(new URL('https://upload.wikimedia.org/foo.jpg'))).toBe(true);
     expect(isAllowedImageHost(new URL('https://images.unsplash.com/photo.jpg'))).toBe(true);
     expect(isAllowedImageHost(new URL('https://example.com/bar.jpg'))).toBe(false);
+  });
+
+  it('detects remote image sources', () => {
+    expect(isRemoteImageSource('https://upload.wikimedia.org/foo.jpg')).toBe(true);
+    expect(isRemoteImageSource('HTTP://images.unsplash.com/photo.jpg')).toBe(true);
+    expect(isRemoteImageSource('/images/montescudaio/pisa.jpg')).toBe(false);
+    expect(isRemoteImageSource('images/montescudaio/pisa.jpg')).toBe(false);
+  });
+
+  it('normalizes image sources for rendering', () => {
+    const remote = 'https://upload.wikimedia.org/foo.jpg';
+    expect(resolveImageSrc(remote)).toContain('/api/image');
+    expect(resolveImageSrc('/images/example.jpg')).toBe('/images/example.jpg');
+    expect(resolveImageSrc('images/example.jpg')).toBe('/images/example.jpg');
+    expect(() => resolveImageSrc('   ')).toThrow('Image source must be a non-empty string');
   });
 });
