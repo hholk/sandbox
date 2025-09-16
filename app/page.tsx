@@ -1,5 +1,5 @@
 import Image from 'next/image';
-import { buildImageProxyUrl } from '@/lib/image-proxy';
+import { resolveImageSrc } from '@/lib/image-proxy';
 import { loadItems } from '@/lib/trips';
 import type { Item } from '@/lib/trips';
 
@@ -96,7 +96,7 @@ export default function Page() {
                 {item.image && (
                   <div className="overflow-hidden rounded-2xl border border-[var(--card-border)]">
                     <Image
-                      src={buildImageProxyUrl(item.image)}
+                      src={resolveImageSrc(item.image)}
                       alt={item.name}
                       width={800}
                       height={400}

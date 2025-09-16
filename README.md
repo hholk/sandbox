@@ -58,10 +58,16 @@ provides driving directions in CarPlay and is derived from `map_query`.
       "url": "https://maps.apple.com/?daddr=Example%20Place&dirflg=d"
     }
   ],
-  "image": "https://example.com/image.jpg",
+  "image": "https://upload.wikimedia.org/path/to/example.jpg",
   "map_query": "Example Place"
 }
 ```
+
+Source representative hero images from authoritative ticketing pages or open
+media libraries (e.g., Wikimedia Commons). Only use hosts listed in
+`ALLOWED_IMAGE_HOSTS`; the UI automatically proxies them via `/api/image` and
+caches the response on first request. When you need a new host, add it to the
+allow-list and document the license in the dataset comment.
 
 ## Usage Example
 
@@ -83,9 +89,10 @@ const scenicTrips = items.filter((item) => item.tags?.includes('Strand'));
 The horizontal overflow keeps the sticky navigation compact on small screens while preserving wrapped chips on larger viewports.
 
 ```ts
-const remoteUrl = 'https://upload.wikimedia.org/path/to/image.jpg';
-const response = await fetch(`/api/image?src=${encodeURIComponent(remoteUrl)}`);
-const cachedBlob = await response.blob();
+import { resolveImageSrc } from '@/lib/image-proxy';
+
+const remoteSrc = resolveImageSrc('https://upload.wikimedia.org/path/to/image.jpg');
 ```
 
-The proxy validates hosts in O(1) time and returns cached binaries with long-lived cache headers for CDNs.
+`resolveImageSrc` trims sources in O(n) time and proxies approved hosts through
+the cached API route so deployments fetch and persist imagery post-deploy.

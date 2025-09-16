@@ -6,6 +6,8 @@ export const ALLOWED_IMAGE_HOSTS = Object.freeze([
   'images.unsplash.com',
 ]);
 
+const REMOTE_IMAGE_PATTERN = /^https?:\/\//i;
+
 const CACHE_BUSTER = crypto.createHash('sha1').update(process.env.NODE_ENV ?? 'development').digest('hex').slice(0, 8);
 
 /**
@@ -23,6 +25,34 @@ export function buildImageCacheKey(src: string): string {
 export function buildImageProxyUrl(src: string): string {
   const params = new URLSearchParams({ src, v: CACHE_BUSTER });
   return `/api/image?${params.toString()}`;
+}
+
+/**
+ * Determine whether the provided image source references a remote HTTP(S)
+ * endpoint. The check runs in O(k) time, where k is the source length,
+ * because it only inspects the leading characters.
+ */
+export function isRemoteImageSource(src: string): boolean {
+  return REMOTE_IMAGE_PATTERN.test(src);
+}
+
+/**
+ * Normalize any image source so the UI can render both remote and locally
+ * bundled assets without special casing. Remote URLs are proxied through the
+ * API handler while relative paths are coerced into root-relative references.
+ *
+ * The transformation executes in O(k) time for a source of length k because
+ * it performs a single trim operation and at most one concatenation.
+ */
+export function resolveImageSrc(src: string): string {
+  const trimmed = src.trim();
+  if (trimmed.length === 0) {
+    throw new Error('Image source must be a non-empty string');
+  }
+  if (isRemoteImageSource(trimmed)) {
+    return buildImageProxyUrl(trimmed);
+  }
+  return trimmed.startsWith('/') ? trimmed : `/${trimmed}`;
 }
 
 /**
