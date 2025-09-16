@@ -1,5 +1,5 @@
 import { NextRequest } from 'next/server';
-import { GET, bufferToArrayBuffer } from '@/app/api/image/route';
+import { GET, bufferToArrayBuffer, MAX_CACHE_BYTES } from '@/app/api/image/route';
 import { clearImageCache } from '@/lib/server/image-cache';
 
 describe('image proxy route', () => {
@@ -58,6 +58,43 @@ describe('image proxy route', () => {
     expect(secondBody).toBeInstanceOf(ArrayBuffer);
     expect(Buffer.from(secondBody)).toEqual(buffer);
     expect(fetchMock).toHaveBeenCalledTimes(1);
+  });
+
+  it('serves oversized images without caching them', async () => {
+    const warnSpy = jest.spyOn(console, 'warn').mockImplementation(() => {});
+    try {
+      const oversized = Buffer.alloc(MAX_CACHE_BYTES + 1, 1);
+      fetchMock.mockImplementation(() =>
+        Promise.resolve(
+          new Response(Buffer.from(oversized), {
+            status: 200,
+            headers: { 'content-type': 'image/png' },
+          })
+        )
+      );
+
+      const url = 'https://upload.wikimedia.org/large.jpg';
+      const firstRequest = new NextRequest(`http://localhost/api/image?src=${encodeURIComponent(url)}`);
+      const first = await GET(firstRequest);
+      expect(first.status).toBe(200);
+      const firstBody = await first.arrayBuffer();
+      const firstView = new Uint8Array(firstBody);
+      expect(firstView.length).toBe(oversized.length);
+      expect(firstView[0]).toBe(1);
+      expect(firstView[firstView.length - 1]).toBe(1);
+
+      const secondRequest = new NextRequest(`http://localhost/api/image?src=${encodeURIComponent(url)}`);
+      const second = await GET(secondRequest);
+      expect(second.status).toBe(200);
+      const secondBody = await second.arrayBuffer();
+      const secondView = new Uint8Array(secondBody);
+      expect(secondView.length).toBe(oversized.length);
+      expect(secondView[0]).toBe(1);
+      expect(secondView[secondView.length - 1]).toBe(1);
+      expect(fetchMock).toHaveBeenCalledTimes(2);
+    } finally {
+      warnSpy.mockRestore();
+    }
   });
 
   it('converts SharedArrayBuffer-backed buffers into standalone ArrayBuffers', () => {

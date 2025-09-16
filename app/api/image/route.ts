@@ -3,7 +3,7 @@ import { Buffer } from 'buffer';
 import { isAllowedImageHost } from '@/lib/image-proxy';
 import { CachedImage, getCachedImage, setCachedImage } from '@/lib/server/image-cache';
 
-const MAX_IMAGE_BYTES = 2_500_000; // 2.5 MB upper bound per image
+export const MAX_CACHE_BYTES = 2_500_000; // 2.5 MB upper bound per cached image
 const CACHE_CONTROL_HEADER = 'public, max-age=86400, stale-while-revalidate=604800';
 
 function buildErrorResponse(message: string, status = 400): Response {
@@ -50,9 +50,6 @@ async function fetchRemoteImage(src: string): Promise<CachedImage> {
   }
   const contentType = response.headers.get('content-type') ?? 'application/octet-stream';
   const arrayBuffer = await response.arrayBuffer();
-  if (arrayBuffer.byteLength > MAX_IMAGE_BYTES) {
-    throw new Error('Image too large to cache');
-  }
   const data = Buffer.from(arrayBuffer);
   return {
     contentType,
@@ -91,7 +88,13 @@ export async function GET(request: NextRequest): Promise<Response> {
     }
 
     const fresh = await fetchRemoteImage(src);
-    await setCachedImage(src, fresh);
+    if (fresh.data.byteLength <= MAX_CACHE_BYTES) {
+      await setCachedImage(src, fresh);
+    } else if (process.env.NODE_ENV !== 'production') {
+      console.warn(
+        `Skipping persistent cache for oversized image (${fresh.data.byteLength} bytes): ${src}`
+      );
+    }
     return new Response(bufferToArrayBuffer(fresh.data), {
       status: 200,
       headers: {
