@@ -7,7 +7,7 @@
     "build": "next build --turbopack",
     "start": "next start",
     "lint": "eslint",
-    "test:unit": "jest __tests__/maxpain.test.ts __tests__/trips.test.ts __tests__/page.test.tsx __tests__/image-config.test.ts __tests__/image-route.test.ts",
+    "test:unit": "jest __tests__/maxpain.test.ts __tests__/trips.test.ts __tests__/page.test.tsx __tests__/image-config.test.ts __tests__/image-route.test.ts __tests__/docs.test.ts",
     "test:integration": "jest __tests__/api.test.ts",
     "test:perf": "jest __tests__/perf.test.ts",
     "quality": "node quality.js"
