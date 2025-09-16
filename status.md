@@ -15,3 +15,5 @@
 ## Decisions
 - Keep chip navigation sticky with current shadow treatment to preserve recognisable brand feel.
 - Prioritize deterministic data loaders over real-time fetches to stay Vercel hobby-tier friendly.
+- Remote image delivery stays behind `/api/image` with `ALLOWED_IMAGE_HOSTS` guarding provenance; onboarding a new host now
+  requires doc updates + licence notes in the dataset.

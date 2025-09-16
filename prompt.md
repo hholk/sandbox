@@ -24,6 +24,8 @@
 - Source trip content via `loadItems()` / `loadTrips()` from `lib/trips.ts`; never bypass caching logic.
 - Highlight key derived stats (count, categories, max drive) in O(n) aggregations only.
 - Guard against empty data by surfacing fallback messaging and ensuring deterministic ordering by popularity.
+- Hero images must resolve through `resolveImageSrc` so `/api/image` proxies and caches approved hosts from
+  `ALLOWED_IMAGE_HOSTS`; document any new source before extending the allow-list.
 
 ## Interactions
 - Keep sticky chip navigation accessible (keyboard focus, ARIA labels on icons as needed).
