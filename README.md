@@ -81,3 +81,11 @@ const scenicTrips = items.filter((item) => item.tags?.includes('Strand'));
 ```
 
 The horizontal overflow keeps the sticky navigation compact on small screens while preserving wrapped chips on larger viewports.
+
+```ts
+const remoteUrl = 'https://upload.wikimedia.org/path/to/image.jpg';
+const response = await fetch(`/api/image?src=${encodeURIComponent(remoteUrl)}`);
+const cachedBlob = await response.blob();
+```
+
+The proxy validates hosts in O(1) time and returns cached binaries with long-lived cache headers for CDNs.
