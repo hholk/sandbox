@@ -13,6 +13,10 @@ function buildErrorResponse(message: string, status = 400): Response {
   });
 }
 
+function bufferToArrayBuffer(buffer: Buffer): ArrayBuffer {
+  return buffer.buffer.slice(buffer.byteOffset, buffer.byteOffset + buffer.byteLength);
+}
+
 async function fetchRemoteImage(src: string): Promise<CachedImage> {
   const response = await fetch(src, {
     headers: {
@@ -56,7 +60,7 @@ export async function GET(request: NextRequest): Promise<Response> {
   try {
     const cached = await getCachedImage(src);
     if (cached) {
-      return new Response(cached.data, {
+      return new Response(bufferToArrayBuffer(cached.data), {
         status: 200,
         headers: {
           'content-type': cached.contentType,
@@ -67,7 +71,7 @@ export async function GET(request: NextRequest): Promise<Response> {
 
     const fresh = await fetchRemoteImage(src);
     await setCachedImage(src, fresh);
-    return new Response(fresh.data, {
+    return new Response(bufferToArrayBuffer(fresh.data), {
       status: 200,
       headers: {
         'content-type': fresh.contentType,

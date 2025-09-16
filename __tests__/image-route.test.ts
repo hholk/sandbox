@@ -47,12 +47,16 @@ describe('image proxy route', () => {
     const firstRequest = new NextRequest(`http://localhost/api/image?src=${encodeURIComponent(url)}`);
     const first = await GET(firstRequest);
     expect(first.status).toBe(200);
-    expect(Buffer.from(await first.arrayBuffer())).toEqual(buffer);
+    const firstBody = await first.arrayBuffer();
+    expect(firstBody).toBeInstanceOf(ArrayBuffer);
+    expect(Buffer.from(firstBody)).toEqual(buffer);
 
     const secondRequest = new NextRequest(`http://localhost/api/image?src=${encodeURIComponent(url)}`);
     const second = await GET(secondRequest);
     expect(second.status).toBe(200);
-    expect(Buffer.from(await second.arrayBuffer())).toEqual(buffer);
+    const secondBody = await second.arrayBuffer();
+    expect(secondBody).toBeInstanceOf(ArrayBuffer);
+    expect(Buffer.from(secondBody)).toEqual(buffer);
     expect(fetchMock).toHaveBeenCalledTimes(1);
   });
 });
