@@ -1,0 +1,58 @@
+import { NextRequest } from 'next/server';
+import { GET } from '@/app/api/image/route';
+import { clearImageCache } from '@/lib/server/image-cache';
+
+describe('image proxy route', () => {
+  const originalFetch = global.fetch;
+  const originalEnv = process.env.NODE_ENV;
+  let fetchMock: jest.Mock;
+
+  beforeEach(async () => {
+    await clearImageCache();
+    process.env.NODE_ENV = 'test';
+    fetchMock = jest.fn();
+    global.fetch = fetchMock as unknown as typeof fetch;
+  });
+
+  afterEach(async () => {
+    await clearImageCache();
+    global.fetch = originalFetch;
+    process.env.NODE_ENV = originalEnv;
+    jest.restoreAllMocks();
+  });
+
+  it('rejects requests without src parameter', async () => {
+    const request = new NextRequest('http://localhost/api/image');
+    const response = await GET(request);
+    expect(response.status).toBe(400);
+    expect(await response.json()).toEqual({ error: 'Missing src query parameter' });
+  });
+
+  it('rejects disallowed hosts', async () => {
+    const request = new NextRequest('http://localhost/api/image?src=https%3A%2F%2Fexample.com%2Ftest.jpg');
+    const response = await GET(request);
+    expect(response.status).toBe(400);
+    expect(await response.json()).toEqual({ error: 'Host not allowed' });
+  });
+
+  it('fetches and caches allowed images', async () => {
+    const buffer = Buffer.from('test-image');
+    const mockResponse = new Response(buffer, {
+      status: 200,
+      headers: { 'content-type': 'image/jpeg' },
+    });
+    fetchMock.mockResolvedValue(mockResponse);
+
+    const url = 'https://upload.wikimedia.org/test.jpg';
+    const firstRequest = new NextRequest(`http://localhost/api/image?src=${encodeURIComponent(url)}`);
+    const first = await GET(firstRequest);
+    expect(first.status).toBe(200);
+    expect(Buffer.from(await first.arrayBuffer())).toEqual(buffer);
+
+    const secondRequest = new NextRequest(`http://localhost/api/image?src=${encodeURIComponent(url)}`);
+    const second = await GET(secondRequest);
+    expect(second.status).toBe(200);
+    expect(Buffer.from(await second.arrayBuffer())).toEqual(buffer);
+    expect(fetchMock).toHaveBeenCalledTimes(1);
+  });
+});
