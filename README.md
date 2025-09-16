@@ -69,6 +69,16 @@ media libraries (e.g., Wikimedia Commons). Only use hosts listed in
 caches the response on first request. When you need a new host, add it to the
 allow-list and document the license in the dataset comment.
 
+### Remote Image Pipeline
+
+- `resolveImageSrc` normalises every `image` entry and sends remote URLs through
+  `/api/image`, guaranteeing cached, SSRF-safe delivery.
+- The API route validates hosts against `ALLOWED_IMAGE_HOSTS` before proxying
+  and stores results on first request for deterministic renders.
+- To unblock new photo sources, extend the allow-list in
+  `lib/image-proxy.ts` and mention the licence + provenance alongside the data
+  row so audits stay trivial.
+
 ## Usage Example
 
 ```ts

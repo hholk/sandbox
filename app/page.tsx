@@ -3,6 +3,77 @@ import { resolveImageSrc } from '@/lib/image-proxy';
 import { loadItems } from '@/lib/trips';
 import type { Item } from '@/lib/trips';
 
+const DASH_SEPARATORS = /[–—-]/;
+
+function splitNameSegments(name: string): string[] {
+  return name
+    .split(DASH_SEPARATORS)
+    .map((segment) => segment.trim())
+    .filter((segment) => segment.length > 0);
+}
+
+function stripDescriptors(segment: string): string {
+  return segment
+    .replace(/\(.*?\)/g, '')
+    .split(/[,/@&]/)[0]
+    .trim();
+}
+
+function takeLeadingWords(text: string, limit: number): string {
+  const words = text
+    .split(/\s+/)
+    .map((word) => word.trim())
+    .filter((word) => word.length > 0);
+  return words.slice(0, limit).join(' ');
+}
+
+function isLikelyDateToken(segment: string): boolean {
+  return /^[A-Za-zÄÖÜäöü]{1,3}\s?\d/.test(segment);
+}
+
+export function getNavLabel(item: Item): string {
+  const name = item.name?.trim() ?? '';
+  if (name.length === 0) {
+    return item.id;
+  }
+  const segments = splitNameSegments(name);
+  if (segments.length === 0) {
+    return takeLeadingWords(stripDescriptors(name), 3) || item.id;
+  }
+
+  let primary = segments[0];
+  let secondary = segments[1] ?? '';
+
+  if (isLikelyDateToken(primary) && segments.length > 1) {
+    primary = segments[1];
+    secondary = segments[0];
+  }
+
+  if (primary.includes('@')) {
+    const [beforeAt, afterAt] = primary.split('@');
+    const afterClean = stripDescriptors(afterAt);
+    const beforeClean = stripDescriptors(beforeAt);
+    if (afterClean.length > 0) {
+      if (secondary.length === 0 || isLikelyDateToken(secondary)) {
+        secondary = beforeClean.length > 0 ? beforeClean : secondary;
+      }
+      primary = afterClean;
+    } else if (beforeClean.length > 0) {
+      primary = beforeClean;
+    }
+  }
+
+  const primaryShort =
+    takeLeadingWords(stripDescriptors(primary), 3) || takeLeadingWords(primary, 3) || item.id;
+  const secondaryShort =
+    secondary.length > 0 ? takeLeadingWords(stripDescriptors(secondary), 3) : '';
+
+  if (secondaryShort.length > 0 && secondaryShort !== primaryShort) {
+    return `${primaryShort} – ${secondaryShort}`;
+  }
+  return primaryShort;
+}
+
 function getCategories(itemCategory: Item['category']): string[] {
   if (!itemCategory) {
     return [];
@@ -63,7 +134,7 @@ export default function Page() {
             className="inline-flex items-center gap-2 rounded-full border border-transparent bg-[#ffffff0f] px-3 py-1 text-sm font-medium text-foreground no-underline transition hover:border-[var(--accent)] hover:bg-[rgba(249,115,22,0.15)] hover:text-foreground"
           >
             <span className="h-2 w-2 rounded-full bg-[var(--accent)]" aria-hidden />
-            {item.name}
+            {getNavLabel(item)}
           </a>
         ))}
       </nav>
