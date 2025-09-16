@@ -1,5 +1,5 @@
 import { NextRequest } from 'next/server';
-import { GET } from '@/app/api/image/route';
+import { GET, bufferToArrayBuffer } from '@/app/api/image/route';
 import { clearImageCache } from '@/lib/server/image-cache';
 
 describe('image proxy route', () => {
@@ -58,5 +58,21 @@ describe('image proxy route', () => {
     expect(secondBody).toBeInstanceOf(ArrayBuffer);
     expect(Buffer.from(secondBody)).toEqual(buffer);
     expect(fetchMock).toHaveBeenCalledTimes(1);
+  });
+
+  it('converts SharedArrayBuffer-backed buffers into standalone ArrayBuffers', () => {
+    const shared = new SharedArrayBuffer(4);
+    const view = new Uint8Array(shared);
+    view.set([5, 6, 7, 8]);
+
+    const buffer = Buffer.from(shared);
+    const arrayBuffer = bufferToArrayBuffer(buffer);
+
+    expect(arrayBuffer).toBeInstanceOf(ArrayBuffer);
+    expect(arrayBuffer.byteLength).toBe(4);
+    expect(Buffer.from(arrayBuffer)).toEqual(Buffer.from([5, 6, 7, 8]));
+
+    view.fill(0);
+    expect(Buffer.from(arrayBuffer)).toEqual(Buffer.from([5, 6, 7, 8]));
   });
 });
