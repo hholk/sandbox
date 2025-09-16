@@ -1,6 +1,7 @@
 import fs from 'fs';
 import path from 'path';
 import { appleMapsAppUrl, appleMapsLink, loadItems } from '@/lib/trips';
+import { ALLOWED_IMAGE_HOSTS } from '@/lib/image-proxy';
 
 describe('loadItems', () => {
   const dataDir = path.join(process.cwd(), 'data');
@@ -120,6 +121,25 @@ describe('loadItems', () => {
     const appleApp = item?.links?.find((l) => l.url.startsWith('maps://?q=1,2'));
     expect(appleApp).toBeTruthy();
     expect(item?.tags).toEqual(['a', 'b']);
+  });
+
+  it('only references images from allowed hosts', () => {
+    const items = loadItems();
+    const invalid = items
+      .filter((item) => Boolean(item.image))
+      .filter((item) => {
+        if (!item.image) {
+          return false;
+        }
+        try {
+          const host = new URL(item.image).hostname;
+          return !ALLOWED_IMAGE_HOSTS.includes(host);
+        } catch {
+          return true;
+        }
+      })
+      .map((item) => item.id);
+    expect(invalid).toEqual([]);
   });
 });
 
