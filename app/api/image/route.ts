@@ -13,8 +13,29 @@ function buildErrorResponse(message: string, status = 400): Response {
   });
 }
 
-function bufferToArrayBuffer(buffer: Buffer): ArrayBuffer {
-  return buffer.buffer.slice(buffer.byteOffset, buffer.byteOffset + buffer.byteLength);
+/**
+ * Creates a standalone {@link ArrayBuffer} copy from a Node.js {@link Buffer}.
+ *
+ * When a buffer is backed by a {@link SharedArrayBuffer}, the Web Response API
+ * rejects it. Copying guarantees the return type is always a regular
+ * {@link ArrayBuffer} instance.
+ *
+ * ```ts
+ * const example = bufferToArrayBuffer(Buffer.from([1, 2, 3]));
+ * console.log(example.byteLength); // 3
+ * ```
+ *
+ * The copy runs in O(n) time where n equals the buffer length.
+ */
+export function bufferToArrayBuffer(buffer: Buffer): ArrayBuffer {
+  const { buffer: underlying, byteOffset, byteLength } = buffer;
+  if (underlying instanceof ArrayBuffer) {
+    return underlying.slice(byteOffset, byteOffset + byteLength);
+  }
+
+  const arrayBuffer = new ArrayBuffer(byteLength);
+  new Uint8Array(arrayBuffer).set(buffer);
+  return arrayBuffer;
 }
 
 async function fetchRemoteImage(src: string): Promise<CachedImage> {
