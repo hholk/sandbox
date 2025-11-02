@@ -1,19 +1,17 @@
 # Build Status
 
 ## Active Work
-- [x] Drafted updated prompt, reader, and status docs aligned with v0 vibe-coding conventions.
-- [ ] Validate documentation against future design prompts in staging before rollout.
+- [x] Projekt am 27.05.2024 in ein reines Archiv überführt.
+- [ ] Keine weiteren Aktualisierungen geplant; Dokumentation nur bei Bedarf für Archiv-Hinweise anpassen.
 
 ## Upcoming
-- [ ] Prototype optional tag/drive-time filters as client components respecting current data immutability.
-- [ ] Evaluate localized copy variants (EN/IT) once German baseline is approved.
+- [ ] Keine neuen Features – Fokus liegt auf langfristiger Lesbarkeit der archivierten Daten.
 
 ## Risks
-- Documentation drift if Tailwind tokens or layout primitives change without synchronized updates.
-- Rate limit spikes from Deribit API may require clarifying fallback messaging in the prompt.
+- Langfristige Framework-Änderungen könnten die Archivansicht optisch beeinträchtigen, obwohl die Daten bestehen bleiben.
+- Externe Links in den archivierten Daten werden nicht mehr überwacht und könnten veralten.
 
 ## Decisions
-- Keep chip navigation sticky with current shadow treatment to preserve recognisable brand feel.
-- Prioritize deterministic data loaders over real-time fetches to stay Vercel hobby-tier friendly.
-- Remote image delivery stays behind `/api/image` with `ALLOWED_IMAGE_HOSTS` guarding provenance; onboarding a new host now
-  requires doc updates + licence notes in the dataset.
+- Primäre Landing Page zeigt einen klaren Archiv-Hinweis statt interaktiver Planungstools.
+- Datensatz bleibt lokal gebündelt und wird über `/api/archive` als JSON-Export angeboten.
+- Bestehende Bilder werden weiterhin über die interne Proxy-Route bereitgestellt, aber ohne zukünftige Erweiterungen.
