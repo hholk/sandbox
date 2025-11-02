@@ -2,30 +2,28 @@ import React from 'react';
 import { renderToStaticMarkup } from 'react-dom/server';
 import type { Item } from '@/lib/trips';
 
-jest.mock('next/image', () => ({
+jest.mock('next/link', () => ({
   __esModule: true,
-  default: (props: React.ImgHTMLAttributes<HTMLImageElement>) => React.createElement('img', props),
+  default: ({ children, ...props }: React.AnchorHTMLAttributes<HTMLAnchorElement> & { children: React.ReactNode }) =>
+    React.createElement('a', props, children),
 }));
 
 const mockItems: Item[] = [
   {
-    id: 'pisa',
-    name: 'Pisa – Piazza dei Miracoli & Schiefer Turm',
+    id: 'arch-1',
+    name: 'Pisa Klassiker',
     category: 'Stadt',
+    planning_tips: 'Tickets vorab reservieren.',
     links: [
       { title: 'Tourismus Pisa', url: 'https://www.turismo.pisa.it/' },
     ],
   },
   {
-    id: 'florence',
-    name: 'Florenz kompakt – Uffizien & Altstadt stressfrei',
-    category: 'Stadt',
-    links: [],
-  },
-  {
-    id: 'lucca_sat_indie',
-    name: 'SA 20.09 – WØM FEST OFF (Indie/Electro) @ Distilleria Indie',
-    category: 'Musik',
+    id: 'arch-2',
+    name: 'Weingut Rundgang',
+    category: ['Wein', 'Kulinarik'],
+    organizing_tips: 'Vor Ort anmelden.',
+    drive_time_min: 35,
     links: [],
   },
 ];
@@ -35,40 +33,33 @@ jest.mock('@/lib/trips', () => ({
   loadItems: jest.fn(() => mockItems),
 }));
 
-describe('Page navigation layout', () => {
+describe('Archived landing page', () => {
   beforeEach(() => {
     const { loadItems } = jest.requireMock('@/lib/trips') as { loadItems: jest.Mock };
     loadItems.mockReturnValue(mockItems);
   });
 
-  it('enables horizontal scrolling to avoid wrapped sticky navigation', async () => {
+  it('communicates the archive state and download link', async () => {
     const Page = (await import('@/app/page')).default;
     const html = renderToStaticMarkup(React.createElement(Page));
-    expect(html).toContain('overflow-x-auto');
-    expect(html).toContain('flex-nowrap');
-    expect(html).toContain('lg:flex-wrap');
+    expect(html).toContain('Archiviert seit');
+    expect(html).toContain('/api/archive');
+    expect(html).toContain('JSON-Archiv herunterladen');
   });
 
-  it('adds scroll margin so anchored cards remain readable beneath the sticky nav', async () => {
+  it('lists archived items grouped by category', async () => {
     const Page = (await import('@/app/page')).default;
     const html = renderToStaticMarkup(React.createElement(Page));
-    expect(html).toContain('scroll-mt-40');
+    expect(html).toContain('Stadt');
+    expect(html).toContain('Wein');
+    expect(html).toMatch(/Stadt<\/h3>[\s\S]*Pisa Klassiker/);
+    expect(html).toMatch(/Wein<\/h3>[\s\S]*Weingut Rundgang/);
   });
 
-  it('renders shortened navigation labels derived from long titles', async () => {
+  it('keeps planning and organisation notes visible for each item', async () => {
     const Page = (await import('@/app/page')).default;
     const html = renderToStaticMarkup(React.createElement(Page));
-    expect(html).toContain('Pisa – Piazza dei Miracoli');
-    expect(html).toContain('Florenz kompakt – Uffizien');
-    expect(html).toContain('Distilleria Indie – WØM FEST OFF');
-  });
-});
-
-describe('getNavLabel', () => {
-  it('collapses long titles to concise navigation chips', async () => {
-    const { getNavLabel } = await import('@/app/page');
-    expect(getNavLabel(mockItems[0])).toBe('Pisa – Piazza dei Miracoli');
-    expect(getNavLabel(mockItems[1])).toBe('Florenz kompakt – Uffizien');
-    expect(getNavLabel(mockItems[2])).toBe('Distilleria Indie – WØM FEST OFF');
+    expect(html).toContain('Planung:');
+    expect(html).toContain('Organisation:');
   });
 });

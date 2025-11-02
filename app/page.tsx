@@ -1,243 +1,166 @@
-import Image from 'next/image';
-import { resolveImageSrc } from '@/lib/image-proxy';
+import Link from 'next/link';
 import { loadItems } from '@/lib/trips';
 import type { Item } from '@/lib/trips';
 
-const DASH_SEPARATORS = /[–—-]/;
+const ARCHIVE_DATE_ISO = '2024-05-27';
 
-function splitNameSegments(name: string): string[] {
-  return name
-    .split(DASH_SEPARATORS)
-    .map((segment) => segment.trim())
-    .filter((segment) => segment.length > 0);
-}
-
-function stripDescriptors(segment: string): string {
-  return segment
-    .replace(/\(.*?\)/g, '')
-    .split(/[,/@&]/)[0]
-    .trim();
-}
-
-function takeLeadingWords(text: string, limit: number): string {
-  const words = text
-    .split(/\s+/)
-    .map((word) => word.trim())
-    .filter((word) => word.length > 0);
-  return words.slice(0, limit).join(' ');
-}
-
-function isLikelyDateToken(segment: string): boolean {
-  return /^[A-Za-zÄÖÜäöü]{1,3}\s?\d/.test(segment);
-}
-
-export function getNavLabel(item: Item): string {
-  const name = item.name?.trim() ?? '';
-  if (name.length === 0) {
-    return item.id;
-  }
-  const segments = splitNameSegments(name);
-  if (segments.length === 0) {
-    return takeLeadingWords(stripDescriptors(name), 3) || item.id;
-  }
-
-  let primary = segments[0];
-  let secondary = segments[1] ?? '';
-
-  if (isLikelyDateToken(primary) && segments.length > 1) {
-    primary = segments[1];
-    secondary = segments[0];
-  }
-
-  if (primary.includes('@')) {
-    const [beforeAt, afterAt] = primary.split('@');
-    const afterClean = stripDescriptors(afterAt);
-    const beforeClean = stripDescriptors(beforeAt);
-    if (afterClean.length > 0) {
-      if (secondary.length === 0 || isLikelyDateToken(secondary)) {
-        secondary = beforeClean.length > 0 ? beforeClean : secondary;
-      }
-      primary = afterClean;
-    } else if (beforeClean.length > 0) {
-      primary = beforeClean;
-    }
-  }
-
-  const primaryShort =
-    takeLeadingWords(stripDescriptors(primary), 3) || takeLeadingWords(primary, 3) || item.id;
-  const secondaryShort =
-    secondary.length > 0 ? takeLeadingWords(stripDescriptors(secondary), 3) : '';
-
-  if (secondaryShort.length > 0 && secondaryShort !== primaryShort) {
-    return `${primaryShort} – ${secondaryShort}`;
-  }
-  return primaryShort;
-}
-
-function getCategories(itemCategory: Item['category']): string[] {
-  if (!itemCategory) {
+/**
+ * Convert any provided category field into a reliable array so we can group
+ * items even when the original data mixes strings and arrays.
+ */
+function normaliseCategories(category: Item['category']): string[] {
+  if (!category) {
     return [];
   }
-  return Array.isArray(itemCategory) ? itemCategory : [itemCategory];
+  return Array.isArray(category) ? category : [category];
+}
+
+/**
+ * Format the archive date in German so newcomers immediately understand when
+ * the project stopped receiving updates.
+ */
+function getArchiveDateLabel(): string {
+  const formatter = new Intl.DateTimeFormat('de-DE', {
+    day: '2-digit',
+    month: 'long',
+    year: 'numeric',
+  });
+  return formatter.format(new Date(`${ARCHIVE_DATE_ISO}T00:00:00Z`));
+}
+
+interface ArchiveGroup {
+  label: string;
+  items: Item[];
+}
+
+/**
+ * Group the archived trips by category so the final list stays readable.
+ * We intentionally keep a fallback bucket for uncategorised entries because
+ * some historical records may miss metadata.
+ */
+function buildArchiveGroups(items: Item[]): ArchiveGroup[] {
+  const groups = new Map<string, Item[]>();
+  items.forEach((item) => {
+    const categories = normaliseCategories(item.category);
+    if (categories.length === 0) {
+      const current = groups.get('Ohne Kategorie') ?? [];
+      current.push(item);
+      groups.set('Ohne Kategorie', current);
+      return;
+    }
+    categories.forEach((category) => {
+      const key = category.trim() || 'Ohne Kategorie';
+      const current = groups.get(key) ?? [];
+      current.push(item);
+      groups.set(key, current);
+    });
+  });
+  return Array.from(groups.entries())
+    .map(([label, groupItems]) => ({ label, items: groupItems.sort(sortByName) }))
+    .sort((a, b) => a.label.localeCompare(b.label, 'de'));
+}
+
+function sortByName(a: Item, b: Item): number {
+  return a.name.localeCompare(b.name, 'de');
 }
 
 export default function Page() {
   const items = loadItems();
-  const categories = new Set<string>();
-  const tags = new Set<string>();
-  items.forEach((item) => {
-    getCategories(item.category).forEach((cat) => categories.add(cat));
-    (item.tags ?? []).forEach((tag) => tags.add(tag));
-  });
-  const maxDrive = items.reduce((max, item) => {
-    const value = item.drive_time_min ?? item.drive_min ?? 0;
-    return value > max ? value : max;
-  }, 0);
-  const stats = [
-    { label: 'Erlebnisse', value: items.length.toString() },
-    { label: 'Kategorien', value: categories.size.toString() },
-    { label: 'Tags', value: tags.size.toString() },
-    { label: 'Max. Fahrtzeit', value: `${maxDrive} Min.` },
-  ];
+  const archiveGroups = buildArchiveGroups(items);
+  const totalLinks = items.reduce((sum, item) => sum + (item.links?.length ?? 0), 0);
+
   return (
-    <main className="mx-auto flex w-full max-w-6xl flex-col gap-10 px-6 py-12">
-      <header className="glass-panel relative overflow-hidden rounded-3xl px-8 py-12">
-        <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_top,_rgba(251,146,60,0.15),_transparent_55%)]" />
-        <div className="relative flex flex-col gap-8 lg:flex-row lg:items-center lg:justify-between">
-          <div className="max-w-2xl space-y-4">
-            <p className="text-sm uppercase tracking-[0.3em] text-[var(--muted)]">Montescudaio Roadbook</p>
-            <h1 className="text-4xl font-semibold leading-tight sm:text-5xl">
-              Kuratierte Tagesausflüge mit konkreten Tipps für Anreise, Timing & Tickets.
-            </h1>
-            <p className="text-lg text-[var(--muted)]">
-              Setze auf stressfreie Planung: Alle Empfehlungen wurden nach Popularität sortiert und mit direkten
-              Kartenlinks, Zeitfenstern und Organisationshinweisen versehen.
-            </p>
-          </div>
-          <dl className="grid w-full max-w-md grid-cols-2 gap-4 text-sm text-[var(--muted)]">
-            {stats.map((stat) => (
-              <div key={stat.label} className="glass-panel rounded-2xl px-4 py-5 text-center">
-                <dt className="text-xs uppercase tracking-wide">{stat.label}</dt>
-                <dd className="mt-2 text-2xl font-semibold text-foreground">{stat.value}</dd>
-              </div>
-            ))}
-          </dl>
+    <main className="mx-auto flex w-full max-w-4xl flex-col gap-10 px-6 py-12">
+      <header className="glass-panel space-y-6 rounded-3xl px-8 py-10">
+        <div className="space-y-3">
+          <p className="text-sm uppercase tracking-[0.3em] text-[var(--muted)]">Montescudaio Roadbook</p>
+          <h1 className="text-4xl font-semibold leading-tight sm:text-5xl">Archiviert seit {getArchiveDateLabel()}</h1>
+          <p className="text-lg text-[var(--muted)]">
+            Dieses Projekt bleibt als Nachschlagewerk erhalten, wird aber nicht mehr weiter gepflegt. Alle Tipps,
+            Fahrzeiten und Links findest du unten in einem kompakten Archiv.
+          </p>
+        </div>
+        <div className="flex flex-col gap-3 rounded-2xl border border-[var(--card-border)] bg-[#ffffff08] p-5 text-sm text-[var(--muted)]">
+          <p>
+            <span className="font-semibold text-foreground">Archivumfang:</span> {items.length} Ausflüge mit{' '}
+            {totalLinks} kuratierten Links.
+          </p>
+          <p>
+            <span className="font-semibold text-foreground">Export:</span>{' '}
+            <Link
+              href="/api/archive"
+              className="inline-flex items-center gap-2 rounded-full border border-[rgba(249,115,22,0.35)] bg-[rgba(249,115,22,0.08)] px-3 py-1 text-foreground no-underline transition hover:bg-[rgba(249,115,22,0.2)]"
+            >
+              JSON-Archiv herunterladen ↗
+            </Link>
+          </p>
         </div>
       </header>
-      <nav
-        className="sticky top-6 z-20 flex w-full items-center gap-3 overflow-x-auto rounded-full bg-[#0f172a99] p-4 shadow-xl backdrop-blur flex-nowrap lg:flex-wrap"
-      >
-        {items.map((item) => (
-          <a
-            key={item.id}
-            href={`#${item.id}`}
-            className="inline-flex items-center gap-2 rounded-full border border-transparent bg-[#ffffff0f] px-3 py-1 text-sm font-medium text-foreground no-underline transition hover:border-[var(--accent)] hover:bg-[rgba(249,115,22,0.15)] hover:text-foreground"
-          >
-            <span className="h-2 w-2 rounded-full bg-[var(--accent)]" aria-hidden />
-            {getNavLabel(item)}
-          </a>
-        ))}
-      </nav>
-      <div className="grid gap-6 lg:grid-cols-2">
-        {items.map((item) => {
-          const categoriesForItem = getCategories(item.category);
-          const links = item.links ?? [];
-          return (
-            <article
-              key={item.id}
-              id={item.id}
-              className="glass-panel relative flex flex-col gap-5 overflow-hidden rounded-3xl border border-transparent p-6 transition hover:border-[var(--accent)] hover:shadow-[0_24px_60px_rgba(8,12,21,0.7)] scroll-mt-40"
-            >
-              <div className="space-y-4">
-                <div className="flex flex-wrap items-center justify-between gap-3">
-                  <h2 className="text-2xl font-semibold text-foreground">{item.name}</h2>
-                  {categoriesForItem.length > 0 && (
-                    <div className="flex flex-wrap gap-2 text-xs">
-                      {categoriesForItem.map((category) => (
-                        <span
-                          key={category}
-                          className="rounded-full bg-[rgba(148,163,184,0.12)] px-3 py-1 text-[var(--muted)]"
-                        >
-                          {category}
-                        </span>
-                      ))}
-                    </div>
-                  )}
-                </div>
-                {item.image && (
-                  <div className="overflow-hidden rounded-2xl border border-[var(--card-border)]">
-                    <Image
-                      src={resolveImageSrc(item.image)}
-                      alt={item.name}
-                      width={800}
-                      height={400}
-                      loading="lazy"
-                      className="h-48 w-full object-cover transition duration-500 hover:scale-[1.03]"
-                      sizes="(min-width: 1024px) 45vw, 90vw"
-                    />
-                  </div>
-                )}
-                {item.description && <p className="text-base text-[var(--muted)]">{item.description}</p>}
-              </div>
-              <div className="space-y-3 text-sm text-[var(--muted)]">
-                {(item.planning_tips || item.planning) && (
-                  <p>
-                    <span className="font-semibold text-foreground">Planung:</span> {item.planning_tips ?? item.planning}
-                  </p>
-                )}
-                {(item.organizing_tips || item.organizing) && (
-                  <p>
-                    <span className="font-semibold text-foreground">Organisation:</span>{' '}
-                    {item.organizing_tips ?? item.organizing}
-                  </p>
-                )}
-                {(item.drive_time_min !== undefined || item.drive_min !== undefined) && (
-                  <p>
-                    <span className="font-semibold text-foreground">Fahrtzeit:</span> {item.drive_time_min ?? item.drive_min}{' '}
-                    Min.
-                  </p>
-                )}
-                {item.duration_suggested_min !== undefined && (
-                  <p>
-                    <span className="font-semibold text-foreground">Dauer:</span> {item.duration_suggested_min} Min.
-                  </p>
-                )}
-                {item.price_hint && (
-                  <p>
-                    <span className="font-semibold text-foreground">Preis:</span> {item.price_hint}
-                  </p>
-                )}
-                {item.coords && (
-                  <p>
-                    <span className="font-semibold text-foreground">Koordinaten:</span> {item.coords.lat}, {item.coords.lon}
-                  </p>
-                )}
-                {item.tags && item.tags.length > 0 && (
-                  <p>
-                    <span className="font-semibold text-foreground">Tags:</span> {item.tags.join(', ')}
-                  </p>
-                )}
-              </div>
-              {links.length > 0 && (
-                <div className="flex flex-wrap gap-2 pt-2">
-                  {links.map((link) => (
-                    <a
-                      key={`${item.id}-${link.url}`}
-                      href={link.url}
-                      className="inline-flex items-center gap-2 rounded-full border border-[rgba(249,115,22,0.35)] bg-[rgba(249,115,22,0.08)] px-3 py-1 text-sm font-medium text-foreground no-underline transition hover:bg-[rgba(249,115,22,0.2)]"
-                      target="_blank"
-                      rel="noreferrer"
-                    >
-                      <span aria-hidden>↗</span>
-                      {link.title}
-                    </a>
-                  ))}
-                </div>
-              )}
+      <section className="space-y-6">
+        <h2 className="text-2xl font-semibold text-foreground">Archivierte Inhalte</h2>
+        <p className="text-sm text-[var(--muted)]">
+          Jede Kategorie fasst die damaligen Empfehlungen zusammen. Die Details bleiben bewusst simpel, damit man sie
+          schnell in eigene Notizen kopieren kann.
+        </p>
+        <div className="space-y-4">
+          {archiveGroups.map((group) => (
+            <article key={group.label} className="glass-panel space-y-3 rounded-2xl border border-[var(--card-border)] p-5">
+              <h3 className="text-xl font-semibold text-foreground">{group.label}</h3>
+              <ul className="space-y-3 text-sm text-[var(--muted)]">
+                {group.items.map((item) => (
+                  <li key={item.id} className="space-y-1">
+                    <p className="font-medium text-foreground">{item.name}</p>
+                    {item.description && <p>{item.description}</p>}
+                    {(item.planning_tips || item.planning) && (
+                      <p>
+                        <span className="font-semibold text-foreground">Planung:</span> {item.planning_tips ?? item.planning}
+                      </p>
+                    )}
+                    {(item.organizing_tips || item.organizing) && (
+                      <p>
+                        <span className="font-semibold text-foreground">Organisation:</span>{' '}
+                        {item.organizing_tips ?? item.organizing}
+                      </p>
+                    )}
+                    {(item.drive_time_min !== undefined || item.drive_min !== undefined) && (
+                      <p>
+                        <span className="font-semibold text-foreground">Fahrtzeit:</span> {item.drive_time_min ?? item.drive_min}
+                        {' Min.'}
+                      </p>
+                    )}
+                    {item.duration_suggested_min !== undefined && (
+                      <p>
+                        <span className="font-semibold text-foreground">Dauer:</span> {item.duration_suggested_min} Min.
+                      </p>
+                    )}
+                    {item.price_hint && (
+                      <p>
+                        <span className="font-semibold text-foreground">Preis:</span> {item.price_hint}
+                      </p>
+                    )}
+                    {item.links && item.links.length > 0 && (
+                      <ul className="flex flex-wrap gap-2 pt-1">
+                        {item.links.map((link) => (
+                          <li key={`${item.id}-${link.url}`}>
+                            <a
+                              href={link.url}
+                              className="inline-flex items-center gap-2 rounded-full border border-[rgba(249,115,22,0.35)] bg-[rgba(249,115,22,0.08)] px-3 py-1 text-foreground no-underline transition hover:bg-[rgba(249,115,22,0.2)]"
+                              target="_blank"
+                              rel="noreferrer"
+                            >
+                              ↗ {link.title}
+                            </a>
+                          </li>
+                        ))}
+                      </ul>
+                    )}
+                  </li>
+                ))}
+              </ul>
             </article>
-          );
-        })}
-      </div>
+          ))}
+        </div>
+      </section>
     </main>
   );
 }
